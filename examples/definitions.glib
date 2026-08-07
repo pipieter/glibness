@@ -1,0 +1,6 @@
+definitions {
+    set global player_level = 3
+    set global player_species = "human"
+    set global player_class = "fighter"
+    set global player_subclass = "champion"
+}

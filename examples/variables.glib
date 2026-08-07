@@ -1,0 +1,33 @@
+dialogue main {
+    set speaker "Glibness"
+    say "Greetings, adventurer! Tell me a little bit more about yourself..."
+    say "What species are you?"
+
+    choose {
+        choice "Human" {
+            set species = "a human"
+        }
+        choice "Elf" {
+            set species = "an elven"
+        }
+        choice "Dwarf" {
+            set species = "a dwarven"
+        }
+    }
+
+    say "And what class might you be?"
+
+    choose {
+        choice "Warrior" {
+            set class = "fighter"
+        }
+        choice "Cleric" {
+            set class = "priest"
+        }
+        choice "Mage" {
+            set class = "spellcaster"
+        }
+    }
+
+    say "Ah, I see you are {species} {class}. This will be an exciting journey!"
+}

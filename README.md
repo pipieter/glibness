@@ -1,0 +1,1 @@
+antlr4 -Dlanguage=Go Glibness.g4 -o grammar

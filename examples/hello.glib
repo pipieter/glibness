@@ -1,0 +1,7 @@
+dialogue main {
+    set speaker "Glibness"
+    say "Hello!"
+    say "Welcome to the Glibness library!"
+    say "If you've built the glibtalk tool, you can use it to view some examples!"
+    say "Just use ./glibtalk [file]"
+}

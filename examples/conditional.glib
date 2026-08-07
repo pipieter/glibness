@@ -1,0 +1,52 @@
+dialogue main {
+    set speaker "Glibness"
+    say "Can you guess my secret password? (hint: it's 123)"
+
+    set guess = 0
+
+    // First digit
+    choose {
+        choice "1" {
+            set guess = guess + 100
+        }
+        choice "2" {
+            set guess = guess + 200
+        }
+        choice "3" {
+            set guess = guess + 300
+        }
+    }
+
+    // Second digit
+    choose {
+        choice "1" {
+            set guess = guess + 10
+        }
+        choice "2" {
+            set guess = guess + 20
+        }
+        choice "3" {
+            set guess = guess + 30
+        }
+    }
+
+    // Third digit
+    choose {
+        choice "1" {
+            set guess = guess + 1
+        }
+        choice "2" {
+            set guess = guess + 2
+        }
+        choice "3" {
+            set guess = guess + 3
+        }
+    }
+
+    // Resolve
+    if (guess == 123) {
+        say "You got it exactly right!"
+    } else {
+        say "Hmm, that's not it..."
+    }
+}

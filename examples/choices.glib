@@ -1,0 +1,20 @@
+dialogue main {
+    set speaker "Glibness"
+    say "This dialogue contains some choices."
+    say "What's your favorite animal?"
+    
+    choose {
+        choice "Dog" {
+            say "Wow, I like dogs too!"
+        }
+        choice "Cat" {
+            say "Okay..."
+            say "I prefer dogs myself..."
+        }
+        choice "Penguin" {
+            say "Penguins?! Now that's a surprise!"
+        }
+    }
+
+    say "Thank you for answering the question."
+}
