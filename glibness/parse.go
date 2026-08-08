@@ -4,6 +4,7 @@ import (
 	"fmt"
 	parser "glibness/grammar"
 	"reflect"
+	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
 )
@@ -70,13 +71,21 @@ func parseStatement(node parser.IStatementContext) (Statement, error) {
 
 func parseSetStatement(node parser.ISetStatementContext) (SetStatement, error) {
 	variable := node.GetVariable().GetText()
-	value := node.GetVal().GetText()
+	value := parseValue(node.GetVal())
 	return SetStatement{variable: variable, value: value}, nil
 }
 
 func parseSayStatement(node parser.ISayStatementContext) (SayStatement, error) {
-	value := node.GetVal().GetText()
+	value := parseValue(node.GetVal())
 	return SayStatement{sentence: value}, nil
+}
+
+func parseValue(node parser.IValueContext) string {
+	// For now only strings are supported...
+	value := node.GetText()
+	value = strings.TrimSuffix(value, "\"")
+	value = strings.TrimPrefix(value, "\"")
+	return value
 }
 
 func Parse(input string) ([]Dialogue, error) {
