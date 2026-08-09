@@ -15,55 +15,48 @@ type GlibnessListener struct {
 
 func parseDialogue(node parser.IDialogueContext) (Dialogue, error) {
 	name := node.GetName().GetText()
-	statements, err := parseStatements(node.Statements())
+	statements, err := parseStatementBlock(node.StatementBlock(), nil)
 
 	if err != nil {
 		return Dialogue{}, err
 	}
 
-	return Dialogue{name: name, statements: statements}, nil
+	return Dialogue{Name: name, Root: statements}, nil
 }
 
-func parseStatements(node parser.IStatementsContext) ([]Statement, error) {
-	statements := make([]Statement, 0)
+func parseStatementBlock(node parser.IStatementBlockContext, parent *StatementBlock) (StatementBlock, error) {
+	block := StatementBlock{Statements: make([]Statement, 0), Parent: parent}
 
-	for _, statement := range node.GetChildren() {
+	for _, statement := range node.AllStatement() {
 		if statement, ok := statement.(*parser.StatementContext); ok {
-			statement, err := parseStatement(statement)
+			statement, err := parseStatement(statement, &block)
 
 			if err != nil {
-				return nil, err
+				return StatementBlock{}, err
 			}
 
-			statements = append(statements, statement)
+			block.Statements = append(block.Statements, statement)
 		} else {
-			return nil, fmt.Errorf("Unknown statements type: %s", reflect.TypeOf(statement))
+			return StatementBlock{}, fmt.Errorf("Unknown statements type: %s", reflect.TypeOf(statement))
 		}
 	}
 
-	return statements, nil
+	return block, nil
 }
 
-func parseStatement(node parser.IStatementContext) (Statement, error) {
-	statement := node.GetChildren()[0]
+func parseStatement(node parser.IStatementContext, parent *StatementBlock) (Statement, error) {
+	child := node.GetChildren()[0]
 
-	if set, ok := statement.(parser.ISetStatementContext); ok {
-		set, err := parseSetStatement(set)
+	switch statement := child.(type) {
 
-		if err != nil {
-			return nil, err
-		}
+	case parser.ISetStatementContext:
+		return parseSetStatement(statement)
 
-		return set, nil
+	case parser.ISayStatementContext:
+		return parseSayStatement(statement)
 
-	} else if say, ok := statement.(parser.ISayStatementContext); ok {
-		say, err := parseSayStatement(say)
-
-		if err != nil {
-			return nil, err
-		}
-
-		return say, nil
+	case parser.IChooseStatementContext:
+		return parseChooseStatement(statement, parent)
 	}
 
 	return nil, fmt.Errorf("Unsupported statement type: %s", reflect.TypeOf(node))
@@ -72,17 +65,49 @@ func parseStatement(node parser.IStatementContext) (Statement, error) {
 func parseSetStatement(node parser.ISetStatementContext) (SetStatement, error) {
 	variable := node.GetVariable().GetText()
 	value := parseValue(node.GetVal())
-	return SetStatement{variable: variable, value: value}, nil
+	return SetStatement{Variable: variable, Value: value}, nil
 }
 
 func parseSayStatement(node parser.ISayStatementContext) (SayStatement, error) {
 	value := parseValue(node.GetVal())
-	return SayStatement{sentence: value}, nil
+	return SayStatement{Sentence: value}, nil
+}
+
+func parseChooseStatement(node parser.IChooseStatementContext, parent *StatementBlock) (ChooseStatement, error) {
+	choices := make([]Choice, 0)
+
+	for _, choice := range node.ChoiceBlock().AllChoice() {
+		choice, err := parseChoice(choice, parent)
+
+		if err != nil {
+			return ChooseStatement{}, err
+		}
+
+		choices = append(choices, choice)
+	}
+
+	return ChooseStatement{Choices: choices}, nil
+}
+
+func parseChoice(node parser.IChoiceContext, parent *StatementBlock) (Choice, error) {
+	name := trimStringQuotes(node.GetName().GetText())
+	block, err := parseStatementBlock(node.GetBlock(), parent)
+
+	if err != nil {
+		return Choice{}, err
+	}
+
+	return Choice{Name: name, Block: block}, nil
+
 }
 
 func parseValue(node parser.IValueContext) string {
 	// For now only strings are supported...
 	value := node.GetText()
+	return trimStringQuotes(value)
+}
+
+func trimStringQuotes(value string) string {
 	value = strings.TrimSuffix(value, "\"")
 	value = strings.TrimPrefix(value, "\"")
 	return value

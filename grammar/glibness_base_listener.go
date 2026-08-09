@@ -33,11 +33,11 @@ func (s *BaseGlibnessListener) EnterDialogue(ctx *DialogueContext) {}
 // ExitDialogue is called when production dialogue is exited.
 func (s *BaseGlibnessListener) ExitDialogue(ctx *DialogueContext) {}
 
-// EnterStatements is called when production statements is entered.
-func (s *BaseGlibnessListener) EnterStatements(ctx *StatementsContext) {}
+// EnterStatementBlock is called when production statementBlock is entered.
+func (s *BaseGlibnessListener) EnterStatementBlock(ctx *StatementBlockContext) {}
 
-// ExitStatements is called when production statements is exited.
-func (s *BaseGlibnessListener) ExitStatements(ctx *StatementsContext) {}
+// ExitStatementBlock is called when production statementBlock is exited.
+func (s *BaseGlibnessListener) ExitStatementBlock(ctx *StatementBlockContext) {}
 
 // EnterStatement is called when production statement is entered.
 func (s *BaseGlibnessListener) EnterStatement(ctx *StatementContext) {}
@@ -56,6 +56,24 @@ func (s *BaseGlibnessListener) EnterSetStatement(ctx *SetStatementContext) {}
 
 // ExitSetStatement is called when production setStatement is exited.
 func (s *BaseGlibnessListener) ExitSetStatement(ctx *SetStatementContext) {}
+
+// EnterChooseStatement is called when production chooseStatement is entered.
+func (s *BaseGlibnessListener) EnterChooseStatement(ctx *ChooseStatementContext) {}
+
+// ExitChooseStatement is called when production chooseStatement is exited.
+func (s *BaseGlibnessListener) ExitChooseStatement(ctx *ChooseStatementContext) {}
+
+// EnterChoiceBlock is called when production choiceBlock is entered.
+func (s *BaseGlibnessListener) EnterChoiceBlock(ctx *ChoiceBlockContext) {}
+
+// ExitChoiceBlock is called when production choiceBlock is exited.
+func (s *BaseGlibnessListener) ExitChoiceBlock(ctx *ChoiceBlockContext) {}
+
+// EnterChoice is called when production choice is entered.
+func (s *BaseGlibnessListener) EnterChoice(ctx *ChoiceContext) {}
+
+// ExitChoice is called when production choice is exited.
+func (s *BaseGlibnessListener) ExitChoice(ctx *ChoiceContext) {}
 
 // EnterValue is called when production value is entered.
 func (s *BaseGlibnessListener) EnterValue(ctx *ValueContext) {}

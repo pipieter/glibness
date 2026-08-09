@@ -14,8 +14,8 @@ type GlibnessListener interface {
 	// EnterDialogue is called when entering the dialogue production.
 	EnterDialogue(c *DialogueContext)
 
-	// EnterStatements is called when entering the statements production.
-	EnterStatements(c *StatementsContext)
+	// EnterStatementBlock is called when entering the statementBlock production.
+	EnterStatementBlock(c *StatementBlockContext)
 
 	// EnterStatement is called when entering the statement production.
 	EnterStatement(c *StatementContext)
@@ -26,6 +26,15 @@ type GlibnessListener interface {
 	// EnterSetStatement is called when entering the setStatement production.
 	EnterSetStatement(c *SetStatementContext)
 
+	// EnterChooseStatement is called when entering the chooseStatement production.
+	EnterChooseStatement(c *ChooseStatementContext)
+
+	// EnterChoiceBlock is called when entering the choiceBlock production.
+	EnterChoiceBlock(c *ChoiceBlockContext)
+
+	// EnterChoice is called when entering the choice production.
+	EnterChoice(c *ChoiceContext)
+
 	// EnterValue is called when entering the value production.
 	EnterValue(c *ValueContext)
 
@@ -35,8 +44,8 @@ type GlibnessListener interface {
 	// ExitDialogue is called when exiting the dialogue production.
 	ExitDialogue(c *DialogueContext)
 
-	// ExitStatements is called when exiting the statements production.
-	ExitStatements(c *StatementsContext)
+	// ExitStatementBlock is called when exiting the statementBlock production.
+	ExitStatementBlock(c *StatementBlockContext)
 
 	// ExitStatement is called when exiting the statement production.
 	ExitStatement(c *StatementContext)
@@ -46,6 +55,15 @@ type GlibnessListener interface {
 
 	// ExitSetStatement is called when exiting the setStatement production.
 	ExitSetStatement(c *SetStatementContext)
+
+	// ExitChooseStatement is called when exiting the chooseStatement production.
+	ExitChooseStatement(c *ChooseStatementContext)
+
+	// ExitChoiceBlock is called when exiting the choiceBlock production.
+	ExitChoiceBlock(c *ChoiceBlockContext)
+
+	// ExitChoice is called when exiting the choice production.
+	ExitChoice(c *ChoiceContext)
 
 	// ExitValue is called when exiting the value production.
 	ExitValue(c *ValueContext)

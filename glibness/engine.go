@@ -11,7 +11,9 @@ type Engine struct {
 type DialogueState struct {
 	Engine   *Engine
 	Dialogue *Dialogue
-	Index    int
+
+	Block *StatementBlock
+	Index int
 
 	Speaker   string
 	Sentence  string
@@ -28,10 +30,11 @@ const (
 
 func (engine *Engine) Start(name string) (DialogueState, error) {
 	for _, dialogue := range engine.Dialogues {
-		if dialogue.name == name {
+		if dialogue.Name == name {
 			return DialogueState{
 				Engine:    engine,
 				Dialogue:  &dialogue,
+				Block:     &dialogue.Root,
 				Index:     0,
 				Speaker:   "",
 				Sentence:  "",
@@ -46,15 +49,15 @@ func (engine *Engine) Start(name string) (DialogueState, error) {
 
 func (state *DialogueState) execute(s Statement) (int, error) {
 	if say, ok := s.(SayStatement); ok {
-		state.Sentence = say.sentence
+		state.Sentence = say.Sentence
 		return DialogueChangeSay, nil
 	}
 
 	if set, ok := s.(SetStatement); ok {
-		if set.variable == "speaker" {
-			state.Speaker = set.value
+		if set.Variable == "speaker" {
+			state.Speaker = set.Value
 		} else {
-			state.Variables[set.variable] = set.value
+			state.Variables[set.Variable] = set.Value
 		}
 		return DialogueChangeInternal, nil
 	}
@@ -67,12 +70,12 @@ func (state *DialogueState) Next() (int, error) {
 		return DialogueChangeStop, nil
 	}
 
-	if state.Index >= len(state.Dialogue.statements) {
+	if state.Index >= len(state.Dialogue.Root.Statements) {
 		state.Finished = true
 		return DialogueChangeStop, nil
 	}
 
-	statement := state.Dialogue.statements[state.Index]
+	statement := state.Block.Statements[state.Index]
 	status, err := state.execute(statement)
 	state.Index += 1
 
