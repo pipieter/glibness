@@ -86,6 +86,17 @@ func parseChooseStatement(node parser.IChooseStatementContext, parent *Statement
 		choices = append(choices, choice)
 	}
 
+	// Check if any duplicate choices were found
+	uniqueChoices := map[string]int{}
+	for _, choice := range choices {
+		_, ok := uniqueChoices[choice.Name]
+		if ok {
+			return ChooseStatement{}, fmt.Errorf("Choice %s was found multiple times in dialogue.", choice.Name)
+		} else {
+			uniqueChoices[choice.Name] = 1
+		}
+	}
+
 	return ChooseStatement{Choices: choices}, nil
 }
 

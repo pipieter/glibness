@@ -42,17 +42,45 @@ func main() {
 	}
 
 	for !state.Finished {
-		status, err := state.Next()
+		response, err := state.Next()
 
 		if err != nil {
 			fmt.Println(err)
 			return
 		}
 
-		if status == glibness.DialogueChangeSay {
-			fmt.Printf("[%s]: %s\n", state.Speaker, state.Sentence)
+		switch response := response.(type) {
+
+		case glibness.SayResponse:
+			fmt.Printf("[%s]: %s\n", response.Speaker, response.Sentence)
 			// TODO find something better
 			time.Sleep(time.Second)
+
+		case glibness.ChoiceResponse:
+			for i, choice := range response.Choices {
+				fmt.Printf("%d. %s\n", i+1, choice.Name)
+			}
+
+			validAnswer := false
+			var index int
+			for !validAnswer {
+				fmt.Printf("> ")
+				_, err := fmt.Scanf("%d", &index)
+				if err != nil {
+					fmt.Printf("[%s] Hmm, I didn't quite catch that. Please select a number.\n", state.Speaker)
+					continue
+				}
+
+				err = state.RespondIndex(index - 1)
+				if err != nil {
+					fmt.Printf("[%s] Hmm, I don't think that's right. Please select a valid number.\n", state.Speaker)
+					continue
+				}
+
+				validAnswer = true
+			}
+
 		}
+
 	}
 }

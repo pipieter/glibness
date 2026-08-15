@@ -2,7 +2,7 @@ dialogue main {
     set speaker "Glibness"
     say "This dialogue contains some choices."
     say "What's your favorite animal?"
-    
+
     choose {
         choice "Dog" {
             say "Wow, I like dogs too!"
@@ -13,6 +13,8 @@ dialogue main {
         }
         choice "Penguin" {
             say "Penguins?! Now that's a surprise!"
+            say "I can talk all day about penguins!"
+            say "Did you know that penguins are actually birds?!"
         }
     }
 

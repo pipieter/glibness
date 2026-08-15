@@ -1,6 +1,9 @@
 package glibness
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 type Node interface {
 	String() string
@@ -48,4 +51,13 @@ func (s SayStatement) String() string {
 
 func (s SetStatement) String() string {
 	return fmt.Sprintf("set %s '%s'", s.Variable, s.Value)
+}
+
+func (s ChooseStatement) String() string {
+	choices := make([]string, 0)
+	for _, choice := range s.Choices {
+		choices = append(choices, choice.Name)
+	}
+	joined := strings.Join(choices, "\", \"")
+	return fmt.Sprintf("choose { \"%s\" }", joined)
 }

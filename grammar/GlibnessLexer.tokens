@@ -9,7 +9,6 @@ RBRACE=8
 LBRACE=9
 STRING=10
 VARIABLE=11
-'\n'=2
 'dialogue'=3
 'set'=4
 'say'=5

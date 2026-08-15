@@ -33,7 +33,7 @@ var GlibnessParserStaticData struct {
 func glibnessParserInit() {
 	staticData := &GlibnessParserStaticData
 	staticData.LiteralNames = []string{
-		"", "", "'\\n'", "'dialogue'", "'set'", "'say'", "'choose'", "'choice'",
+		"", "", "", "'dialogue'", "'set'", "'say'", "'choose'", "'choice'",
 		"'}'", "'{'",
 	}
 	staticData.SymbolicNames = []string{
