@@ -71,7 +71,7 @@ func main() {
 					continue
 				}
 
-				err = engine.RespondIndex(index - 1)
+				err = engine.Respond(index - 1)
 				if err != nil {
 					fmt.Printf("[%s] Hmm, I don't think that's right. Please select a valid number.\n", engine.Speaker())
 					continue

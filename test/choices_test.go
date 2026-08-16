@@ -114,15 +114,11 @@ func TestInvalidChoiceTree(t *testing.T) {
 	assert.Nil(err)
 
 	// Make a wrong choice here, on purpose
-	err = engine.Respond("X")
-	assert.NotNil(err)
-
-	// Make a wrong choice here, on purpose
-	err = engine.RespondIndex(999)
+	err = engine.Respond(999)
 	assert.NotNil(err)
 
 	// Make a right choice here
-	err = engine.Respond("B")
+	err = engine.Respond(1)
 	assert.Nil(err)
 
 	// Continue with the script

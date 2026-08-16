@@ -2,7 +2,6 @@ package glibness
 
 import (
 	"fmt"
-	"strings"
 )
 
 type EngineState struct {
@@ -169,7 +168,7 @@ func (engine *Engine) Next() (StateResponse, error) {
 	return status, err
 }
 
-func (engine *Engine) RespondIndex(index int) error {
+func (engine *Engine) Respond(index int) error {
 	if !engine.State.Active {
 		return fmt.Errorf("The engine state is currently not executing any dialogues.")
 	}
@@ -188,21 +187,6 @@ func (engine *Engine) RespondIndex(index int) error {
 	engine.State.CurrentChoices = nil
 
 	return nil
-}
-
-func (engine *Engine) Respond(choice string) error {
-	for i, possibleChoice := range engine.State.CurrentChoices {
-		if possibleChoice.Name == choice {
-			return engine.RespondIndex(i)
-		}
-	}
-
-	choices := make([]string, 0)
-	for _, choice := range engine.State.CurrentChoices {
-		choices = append(choices, choice.Name)
-	}
-	joined := strings.Join(choices, ", ")
-	return fmt.Errorf("Choice %s is not a possible choice of %s.", choice, joined)
 }
 
 func (engine *Engine) Active() bool {
