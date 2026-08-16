@@ -5,13 +5,13 @@ dialogue main {
 
     choose {
         choice "Human" {
-            set species = "a human"
+            set species "a human"
         }
         choice "Elf" {
-            set species = "an elven"
+            set species "an elven"
         }
         choice "Dwarf" {
-            set species = "a dwarven"
+            set species "a dwarven"
         }
     }
 
@@ -19,13 +19,13 @@ dialogue main {
 
     choose {
         choice "Warrior" {
-            set class = "fighter"
+            set class "fighter"
         }
         choice "Cleric" {
-            set class = "priest"
+            set class "priest"
         }
         choice "Mage" {
-            set class = "spellcaster"
+            set class "spellcaster"
         }
     }
 
