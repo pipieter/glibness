@@ -97,40 +97,40 @@ func TestInvalidChoiceTree(t *testing.T) {
 	assert.IsType(dialogue.Root.Statements[1], glibness.SayStatement{})
 	assert.IsType(dialogue.Root.Statements[2], glibness.ChooseStatement{})
 
-	engine := glibness.Engine{Dialogues: []glibness.Dialogue{dialogue}}
-	state, err := engine.Start("test")
+	engine := glibness.NewEngine(dialogues)
+	err = engine.Start("test")
 	assert.Nil(err)
 
-	response, err = state.Next()
+	response, err = engine.Next()
 	assert.IsType(response, glibness.InternalChangeResponse{})
 	assert.Nil(err)
 
-	response, err = state.Next()
+	response, err = engine.Next()
 	assert.IsType(response, glibness.SayResponse{})
 	assert.Nil(err)
 
-	response, err = state.Next()
+	response, err = engine.Next()
 	assert.IsType(response, glibness.ChoiceResponse{})
 	assert.Nil(err)
 
 	// Make a wrong choice here, on purpose
-	err = state.Respond("X")
+	err = engine.Respond("X")
 	assert.NotNil(err)
 
 	// Make a wrong choice here, on purpose
-	err = state.RespondIndex(999)
+	err = engine.RespondIndex(999)
 	assert.NotNil(err)
 
 	// Make a right choice here
-	err = state.Respond("B")
+	err = engine.Respond("B")
 	assert.Nil(err)
 
 	// Continue with the script
-	response, err = state.Next()
+	response, err = engine.Next()
 	assert.IsType(response, glibness.SayResponse{})
 	assert.Nil(err)
 
-	response, err = state.Next()
+	response, err = engine.Next()
 	assert.IsType(response, glibness.FinishedResponse{})
 	assert.Nil(err)
 }

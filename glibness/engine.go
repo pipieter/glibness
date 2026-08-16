@@ -5,22 +5,16 @@ import (
 	"strings"
 )
 
-type Engine struct {
-	Dialogues []Dialogue
+type EngineState struct {
+	Active         bool
+	Blocks         []DialogueBlock
+	CurrentChoices []Choice
 }
 
-type DialogueState struct {
-	Engine   *Engine
-	Dialogue *Dialogue
-
-	Blocks []DialogueBlock
-
-	Speaker   string
-	Sentence  string
+type Engine struct {
+	Dialogues []Dialogue
 	Variables map[string]string
-	Finished  bool
-
-	CurrentChoices []Choice
+	State     EngineState
 }
 
 type DialogueBlock struct {
@@ -47,122 +41,170 @@ type ChoiceResponse struct {
 type FinishedResponse struct {
 }
 
-func (engine *Engine) Start(name string) (DialogueState, error) {
+// TODO change this
+func NewEngine(dialogues []Dialogue) Engine {
+	return Engine{
+		Dialogues: dialogues,
+		Variables: make(map[string]string),
+		State: EngineState{
+			Active:         false,
+			Blocks:         nil,
+			CurrentChoices: nil,
+		},
+	}
+}
+
+func (engine *Engine) Start(name string) error {
+	if engine.State.Active {
+		return fmt.Errorf("A dialogue state named '%s' is already active.", engine.DialogueName())
+	}
+
 	for _, dialogue := range engine.Dialogues {
 		if dialogue.Name == name {
 			block := DialogueBlock{Block: &dialogue.Root, Index: 0}
-			return DialogueState{
-				Engine:    engine,
-				Dialogue:  &dialogue,
-				Blocks:    []DialogueBlock{block},
-				Speaker:   "",
-				Sentence:  "",
-				Variables: make(map[string]string),
-				Finished:  false,
-			}, nil
+
+			engine.State.Active = true
+			engine.State.Blocks = []DialogueBlock{block}
+			engine.State.CurrentChoices = nil
+
+			engine.Variables["speaker"] = ""
+			engine.Variables["sentence"] = ""
+			engine.Variables["dialogue"] = name
+
+			return nil
 		}
 	}
 
-	return DialogueState{}, fmt.Errorf("Could not find dialogue with name '%s'", name)
+	return fmt.Errorf("Could not find dialogue with name '%s'", name)
 }
 
-func (state *DialogueState) execute(statement Statement) (StateResponse, error) {
+func (engine Engine) Speaker() string {
+	return engine.Variables["speaker"]
+}
+
+func (engine Engine) Sentence() string {
+	return engine.Variables["sentence"]
+}
+
+func (engine Engine) DialogueName() string {
+	return engine.Variables["dialogue"]
+}
+
+func (engine *Engine) execute(statement Statement) (StateResponse, error) {
+	if !engine.State.Active {
+		return FinishedResponse{}, fmt.Errorf("Engine is currently not executing a dialogue.")
+	}
+
 	switch statement := statement.(type) {
 
 	case SayStatement:
-		state.Sentence = statement.Sentence
-		return SayResponse{Speaker: state.Speaker, Sentence: state.Sentence}, nil
+		engine.Variables["sentence"] = statement.Sentence
+		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, nil
 
 	case SetStatement:
-		if statement.Variable == "speaker" {
-			state.Speaker = statement.Value
-		} else {
-			state.Variables[statement.Variable] = statement.Value
-		}
+		engine.Variables[statement.Variable] = statement.Value
 		return InternalChangeResponse{Change: "set variable"}, nil
 
 	case ChooseStatement:
-		state.CurrentChoices = statement.Choices
+		engine.State.CurrentChoices = statement.Choices
 		return ChoiceResponse{Choices: statement.Choices}, nil
 	}
 
 	return FinishedResponse{}, fmt.Errorf("Unsupported statement: %s", statement.String())
 }
 
-func (state *DialogueState) CurrentBlock() *DialogueBlock {
-	if len(state.Blocks) == 0 {
+func (engine *Engine) Finish() error {
+	engine.Variables["speaker"] = ""
+	engine.Variables["sentence"] = ""
+	engine.Variables["dialogue"] = ""
+	engine.State.Active = false
+	engine.State.Blocks = nil
+	engine.State.CurrentChoices = nil
+	return nil
+}
+
+func (engine *Engine) CurrentBlock() *DialogueBlock {
+	if len(engine.State.Blocks) == 0 {
 		return nil
 	}
-	return &state.Blocks[len(state.Blocks)-1]
+	return &engine.State.Blocks[len(engine.State.Blocks)-1]
 }
 
 // Pop the last dialogue block and return the length of the new blocks
-func (state *DialogueState) PopBlock() int {
-	if len(state.Blocks) == 0 {
+func (engine *Engine) PopBlock() int {
+	if len(engine.State.Blocks) == 0 {
 		return 0
 	}
 
-	state.Blocks = state.Blocks[:len(state.Blocks)-1]
-	return len(state.Blocks)
+	engine.State.Blocks = engine.State.Blocks[:len(engine.State.Blocks)-1]
+	return len(engine.State.Blocks)
 }
 
-func (state *DialogueState) Next() (StateResponse, error) {
-	// If currently waiting for a ChooseResponse, repeat it
-	if state.CurrentChoices != nil {
-		return ChoiceResponse{Choices: state.CurrentChoices}, nil
-	}
-
-	if state.Finished {
+func (engine *Engine) Next() (StateResponse, error) {
+	if !engine.State.Active {
 		return FinishedResponse{}, nil
 	}
 
-	block := state.CurrentBlock()
+	// If currently waiting for a ChooseResponse, repeat it
+	if engine.State.CurrentChoices != nil {
+		return ChoiceResponse{Choices: engine.State.CurrentChoices}, nil
+	}
+
+	block := engine.CurrentBlock()
 
 	// Block has finished executing
 	for block.Index >= len(block.Block.Statements) {
-		remaining := state.PopBlock()
+		remaining := engine.PopBlock()
 		if remaining == 0 {
-			state.Finished = true
-			return FinishedResponse{}, nil
+			err := engine.Finish()
+			return FinishedResponse{}, err
 		}
-		block = state.CurrentBlock()
+		block = engine.CurrentBlock()
 	}
 
 	statement := block.Block.Statements[block.Index]
-	status, err := state.execute(statement)
+	status, err := engine.execute(statement)
 	block.Index += 1
 
 	return status, err
 }
 
-func (state *DialogueState) RespondIndex(index int) error {
-	if state.CurrentChoices == nil {
+func (engine *Engine) RespondIndex(index int) error {
+	if !engine.State.Active {
+		return fmt.Errorf("The engine state is currently not executing any dialogues.")
+	}
+
+	if engine.State.CurrentChoices == nil {
 		return fmt.Errorf("The engine state is currently not expecting any choices.")
 	}
 
-	if index < 0 || index >= len(state.CurrentChoices) {
-		return fmt.Errorf("Invalid index %d for %d choices", index, len(state.CurrentChoices))
+	if index < 0 || index >= len(engine.State.CurrentChoices) {
+		return fmt.Errorf("Invalid index %d for %d choices", index, len(engine.State.CurrentChoices))
 	}
 
-	choice := state.CurrentChoices[index]
+	choice := engine.State.CurrentChoices[index]
 
-	state.Blocks = append(state.Blocks, DialogueBlock{Block: &choice.Block, Index: 0})
-	state.CurrentChoices = nil
+	engine.State.Blocks = append(engine.State.Blocks, DialogueBlock{Block: &choice.Block, Index: 0})
+	engine.State.CurrentChoices = nil
 
 	return nil
 }
 
-func (state *DialogueState) Respond(choice string) error {
-	for i, possibleChoice := range state.CurrentChoices {
+func (engine *Engine) Respond(choice string) error {
+	for i, possibleChoice := range engine.State.CurrentChoices {
 		if possibleChoice.Name == choice {
-			return state.RespondIndex(i)
+			return engine.RespondIndex(i)
 		}
 	}
 
 	choices := make([]string, 0)
-	for _, choice := range state.CurrentChoices {
+	for _, choice := range engine.State.CurrentChoices {
 		choices = append(choices, choice.Name)
 	}
 	joined := strings.Join(choices, ", ")
 	return fmt.Errorf("Choice %s is not a possible choice of %s.", choice, joined)
+}
+
+func (engine *Engine) Active() bool {
+	return engine.State.Active
 }

@@ -33,16 +33,16 @@ func main() {
 		return
 	}
 
-	engine := glibness.Engine{Dialogues: dialogues}
-	state, err := engine.Start("main")
+	engine := glibness.NewEngine(dialogues)
+	err = engine.Start("main")
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	for !state.Finished {
-		response, err := state.Next()
+	for engine.Active() {
+		response, err := engine.Next()
 
 		if err != nil {
 			fmt.Println(err)
@@ -65,15 +65,15 @@ func main() {
 			var index int
 			for !validAnswer {
 				fmt.Printf("> ")
-				_, err := fmt.Scanf("%d", &index)
+				_, err = fmt.Scanf("%d", &index)
 				if err != nil {
-					fmt.Printf("[%s] Hmm, I didn't quite catch that. Please select a number.\n", state.Speaker)
+					fmt.Printf("[%s] Hmm, I didn't quite catch that. Please select a number.\n", engine.Speaker())
 					continue
 				}
 
-				err = state.RespondIndex(index - 1)
+				err = engine.RespondIndex(index - 1)
 				if err != nil {
-					fmt.Printf("[%s] Hmm, I don't think that's right. Please select a valid number.\n", state.Speaker)
+					fmt.Printf("[%s] Hmm, I don't think that's right. Please select a valid number.\n", engine.Speaker())
 					continue
 				}
 
