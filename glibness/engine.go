@@ -2,6 +2,7 @@ package glibness
 
 import (
 	"fmt"
+	"strings"
 )
 
 type EngineState struct {
@@ -21,8 +22,7 @@ type DialogueBlock struct {
 	Index int
 }
 
-type StateResponse interface {
-}
+type StateResponse any
 
 type SayResponse struct {
 	Speaker  string
@@ -97,7 +97,7 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	switch statement := statement.(type) {
 
 	case SayStatement:
-		engine.Variables["sentence"] = statement.Sentence
+		engine.Variables["sentence"] = engine.ResolveString(statement.Sentence)
 		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, nil
 
 	case SetStatement:
@@ -110,6 +110,14 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	}
 
 	return FinishedResponse{}, fmt.Errorf("Unsupported statement: %s", statement.String())
+}
+
+func (engine *Engine) ResolveString(str string) string {
+	for variable := range engine.Variables {
+		pattern := fmt.Sprintf("{{%s}}", variable)
+		str = strings.ReplaceAll(str, pattern, engine.Variables[variable])
+	}
+	return str
 }
 
 func (engine *Engine) Finish() error {

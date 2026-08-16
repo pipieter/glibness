@@ -29,5 +29,5 @@ dialogue main {
         }
     }
 
-    say "Ah, I see you are {species} {class}. This will be an exciting journey!"
+    say "Ah, I see you are {{species}} {{class}}. This will be an exciting journey!"
 }
