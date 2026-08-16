@@ -10,7 +10,8 @@ import (
 func TestChoiceTree(t *testing.T) {
 	assert := assert.New(t)
 
-	dialogues, err := glibness.Parse(`
+	engine := glibness.NewEngine()
+	err := engine.ParseString(`
 		dialogue test {
 			set speaker "Test"
 			say "This has a choice message!"
@@ -34,9 +35,9 @@ func TestChoiceTree(t *testing.T) {
 	`)
 
 	assert.Nil(err)
-	assert.Len(dialogues, 1)
+	assert.Len(engine.Dialogues, 1)
 
-	dialogue := dialogues[0]
+	dialogue := engine.Dialogues[0]
 	assert.Equal(dialogue.Name, "test")
 	assert.Len(dialogue.Root.Statements, 4)
 	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
@@ -70,8 +71,8 @@ func TestInvalidChoiceTree(t *testing.T) {
 	var err error
 
 	assert := assert.New(t)
-
-	dialogues, err := glibness.Parse(`
+	engine := glibness.NewEngine()
+	engine.ParseString(`
 		dialogue test {
 			set speaker "Test"
 			say "This has a choice message, which will be answered with a wrong index!"
@@ -88,16 +89,15 @@ func TestInvalidChoiceTree(t *testing.T) {
 	`)
 
 	assert.Nil(err)
-	assert.Len(dialogues, 1)
+	assert.Len(engine.Dialogues, 1)
 
-	dialogue := dialogues[0]
+	dialogue := engine.Dialogues[0]
 	assert.Equal(dialogue.Name, "test")
 	assert.Len(dialogue.Root.Statements, 3)
 	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
 	assert.IsType(dialogue.Root.Statements[1], glibness.SayStatement{})
 	assert.IsType(dialogue.Root.Statements[2], glibness.ChooseStatement{})
 
-	engine := glibness.NewEngine(dialogues)
 	err = engine.Start("test")
 	assert.Nil(err)
 

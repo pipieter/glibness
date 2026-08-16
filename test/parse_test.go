@@ -10,7 +10,8 @@ import (
 func TestBasicTree(t *testing.T) {
 	assert := assert.New(t)
 
-	dialogues, err := glibness.Parse(`
+	engine := glibness.NewEngine()
+	err := engine.ParseString(`
 		dialogue test {
 			set speaker "Test"
 			say "This is a test message"
@@ -19,9 +20,9 @@ func TestBasicTree(t *testing.T) {
 	`)
 
 	assert.Nil(err)
-	assert.Len(dialogues, 1)
+	assert.Len(engine.Dialogues, 1)
 
-	dialogue := dialogues[0]
+	dialogue := engine.Dialogues[0]
 	assert.Equal(dialogue.Name, "test")
 	assert.Len(dialogue.Root.Statements, 3)
 	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
