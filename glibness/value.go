@@ -1,12 +1,14 @@
 package glibness
 
 import (
+	"fmt"
 	"reflect"
 	"strconv"
 )
 
 type Value interface {
 	String() string
+	Evaluate() (Value, error)
 }
 
 type StringValue struct {
@@ -61,6 +63,39 @@ func (variable IntegerValue) String() string {
 func (variable VariableValue) String() string {
 	value := variable.Engine.Variables[variable.Variable].String()
 	return variable.Engine.ResolveString(value)
+}
+
+func (variable StringValue) Evaluate() (Value, error) {
+	return MakeStringValue(variable.value), nil
+}
+
+func (variable BooleanValue) Evaluate() (Value, error) {
+	return MakeBooleanValue(variable.value), nil
+}
+
+func (variable IntegerValue) Evaluate() (Value, error) {
+	return MakeIntValue(variable.value), nil
+}
+
+func (variable VariableValue) Evaluate() (Value, error) {
+	value := variable.Engine.Variables[variable.Variable]
+
+	switch value := value.(type) {
+
+	case VariableValue:
+		return value.Evaluate()
+
+	case StringValue:
+		return MakeStringValue(value.value), nil
+
+	case IntegerValue:
+		return MakeIntValue(value.value), nil
+
+	case BooleanValue:
+		return MakeBooleanValue(value.value), nil
+	}
+
+	return VariableValue{}, fmt.Errorf("Unsupported Value.Evaluate: '%s'", reflect.TypeOf(value))
 }
 
 func Equals(var1 Value, var2 Value) bool {

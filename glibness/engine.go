@@ -40,17 +40,16 @@ type ChoiceResponse struct {
 type FinishedResponse struct {
 }
 
-// TODO change this
-func NewEngine() Engine {
-	return Engine{
-		Dialogues: make([]Dialogue, 0),
-		Variables: make(map[string]Value),
-		State: EngineState{
-			Active:         false,
-			Blocks:         nil,
-			CurrentChoices: nil,
-		},
-	}
+func NewEngine() *Engine {
+	engine := new(Engine)
+
+	engine.Dialogues = make([]Dialogue, 0)
+	engine.Variables = make(map[string]Value)
+	engine.State.Active = false
+	engine.State.Blocks = nil
+	engine.State.CurrentChoices = nil
+
+	return engine
 }
 
 func (engine *Engine) Start(name string) error {
@@ -101,8 +100,14 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, nil
 
 	case SetStatement:
-		engine.Variables[statement.Variable] = statement.Value
-		return InternalChangeResponse{Change: "set variable"}, nil
+		// It's important to evaluate the values here because the set operator
+		// sets the variable by value, not by reference. Pointer-esque operators
+		// are not supported in Glibness.
+		evaluated, err := statement.Value.Evaluate()
+		if err == nil {
+			engine.Variables[statement.Variable] = evaluated
+		}
+		return InternalChangeResponse{Change: "set variable"}, err
 
 	case ChooseStatement:
 		engine.State.CurrentChoices = statement.Choices
