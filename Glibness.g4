@@ -12,7 +12,10 @@ CHOICE: 'choice';
 RBRACE: '}';
 LBRACE: '{';
 STRING: '"' (~["\n])* '"' ;
+INTEGER: [0-9]+;
+BOOLEAN: 'true' | 'false';
 VARIABLE: [A-Za-z_] [A-Za-z_0-9]*;
+
 
 program: NEWLINE* (dialogue NEWLINE*)* EOF;
 
@@ -30,4 +33,4 @@ chooseStatement: CHOOSE block=choiceBlock NEWLINE;
 choiceBlock: LBRACE NEWLINE choices=choice* RBRACE;
 choice: CHOICE name=STRING block=statementBlock NEWLINE;
 
-value: STRING; // Only support strings for now
+value: STRING | INTEGER | BOOLEAN | VARIABLE;

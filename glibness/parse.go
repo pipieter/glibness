@@ -3,7 +3,9 @@ package glibness
 import (
 	"fmt"
 	parser "glibness/grammar"
+	"os"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -13,9 +15,9 @@ type GlibnessListener struct {
 	*parser.BaseGlibnessListener
 }
 
-func parseDialogue(node parser.IDialogueContext) (Dialogue, error) {
+func (engine *Engine) parseDialogue(node parser.IDialogueContext) (Dialogue, error) {
 	name := node.GetName().GetText()
-	statements, err := parseStatementBlock(node.StatementBlock(), nil)
+	statements, err := engine.parseStatementBlock(node.StatementBlock(), nil)
 
 	if err != nil {
 		return Dialogue{}, err
@@ -24,12 +26,12 @@ func parseDialogue(node parser.IDialogueContext) (Dialogue, error) {
 	return Dialogue{Name: name, Root: statements}, nil
 }
 
-func parseStatementBlock(node parser.IStatementBlockContext, parent *StatementBlock) (StatementBlock, error) {
+func (engine *Engine) parseStatementBlock(node parser.IStatementBlockContext, parent *StatementBlock) (StatementBlock, error) {
 	block := StatementBlock{Statements: make([]Statement, 0), Parent: parent}
 
 	for _, statement := range node.AllStatement() {
 		if statement, ok := statement.(*parser.StatementContext); ok {
-			statement, err := parseStatement(statement, &block)
+			statement, err := engine.parseStatement(statement, &block)
 
 			if err != nil {
 				return StatementBlock{}, err
@@ -44,40 +46,40 @@ func parseStatementBlock(node parser.IStatementBlockContext, parent *StatementBl
 	return block, nil
 }
 
-func parseStatement(node parser.IStatementContext, parent *StatementBlock) (Statement, error) {
+func (engine *Engine) parseStatement(node parser.IStatementContext, parent *StatementBlock) (Statement, error) {
 	child := node.GetChildren()[0]
 
 	switch statement := child.(type) {
 
 	case parser.ISetStatementContext:
-		return parseSetStatement(statement)
+		return engine.parseSetStatement(statement)
 
 	case parser.ISayStatementContext:
-		return parseSayStatement(statement)
+		return engine.parseSayStatement(statement)
 
 	case parser.IChooseStatementContext:
-		return parseChooseStatement(statement, parent)
+		return engine.parseChooseStatement(statement, parent)
 	}
 
 	return nil, fmt.Errorf("Unsupported statement type: %s", reflect.TypeOf(node))
 }
 
-func parseSetStatement(node parser.ISetStatementContext) (SetStatement, error) {
+func (engine *Engine) parseSetStatement(node parser.ISetStatementContext) (SetStatement, error) {
 	variable := node.GetVariable().GetText()
-	value := parseValue(node.GetVal())
-	return SetStatement{Variable: variable, Value: value}, nil
+	value, err := engine.parseValue(node.GetVal())
+	return SetStatement{Variable: variable, Value: value}, err
 }
 
-func parseSayStatement(node parser.ISayStatementContext) (SayStatement, error) {
-	value := parseValue(node.GetVal())
-	return SayStatement{Sentence: value}, nil
+func (engine *Engine) parseSayStatement(node parser.ISayStatementContext) (SayStatement, error) {
+	value, err := engine.parseValue(node.GetVal())
+	return SayStatement{Sentence: value}, err
 }
 
-func parseChooseStatement(node parser.IChooseStatementContext, parent *StatementBlock) (ChooseStatement, error) {
+func (engine *Engine) parseChooseStatement(node parser.IChooseStatementContext, parent *StatementBlock) (ChooseStatement, error) {
 	choices := make([]Choice, 0)
 
 	for _, choice := range node.ChoiceBlock().AllChoice() {
-		choice, err := parseChoice(choice, parent)
+		choice, err := engine.parseChoice(choice, parent)
 
 		if err != nil {
 			return ChooseStatement{}, err
@@ -100,9 +102,12 @@ func parseChooseStatement(node parser.IChooseStatementContext, parent *Statement
 	return ChooseStatement{Choices: choices}, nil
 }
 
-func parseChoice(node parser.IChoiceContext, parent *StatementBlock) (Choice, error) {
-	name := trimStringQuotes(node.GetName().GetText())
-	block, err := parseStatementBlock(node.GetBlock(), parent)
+func (engine *Engine) parseChoice(node parser.IChoiceContext, parent *StatementBlock) (Choice, error) {
+	name := (node.GetName().GetText())
+	name = strings.TrimSuffix(name, "\"")
+	name = strings.TrimPrefix(name, "\"")
+
+	block, err := engine.parseStatementBlock(node.GetBlock(), parent)
 
 	if err != nil {
 		return Choice{}, err
@@ -112,19 +117,54 @@ func parseChoice(node parser.IChoiceContext, parent *StatementBlock) (Choice, er
 
 }
 
-func parseValue(node parser.IValueContext) string {
-	// For now only strings are supported...
-	value := node.GetText()
-	return trimStringQuotes(value)
+func (engine *Engine) parseValue(node parser.IValueContext) (Value, error) {
+	if node.BOOLEAN() != nil {
+		return engine.parseBoolean(node.BOOLEAN()), nil
+	}
+	if node.STRING() != nil {
+		return engine.parseString(node.STRING()), nil
+	}
+	if node.INTEGER() != nil {
+		return engine.parseInteger(node.INTEGER()), nil
+	}
+
+	return nil, fmt.Errorf("Unsupported value: '%s'", node.GetText())
 }
 
-func trimStringQuotes(value string) string {
-	value = strings.TrimSuffix(value, "\"")
-	value = strings.TrimPrefix(value, "\"")
-	return value
+func (engine *Engine) parseBoolean(node antlr.TerminalNode) BooleanValue {
+	if node.GetText() == "true" {
+		return MakeBooleanValue(true)
+	} else {
+		return MakeBooleanValue(false)
+
+	}
 }
 
-func Parse(input string) ([]Dialogue, error) {
+func (engine *Engine) parseString(node antlr.TerminalNode) StringValue {
+	text := node.GetText()
+	text = strings.TrimSuffix(text, "\"")
+	text = strings.TrimPrefix(text, "\"")
+	return MakeStringValue(text)
+}
+
+func (engine *Engine) parseInteger(node antlr.TerminalNode) IntegerValue {
+	value, _ := strconv.Atoi(node.GetText())
+	return MakeIntValue(value)
+}
+
+func (engine *Engine) parseVariable(node antlr.TerminalNode) VariableValue {
+	return MakeVariableValue(engine, node.GetText())
+}
+
+func (engine *Engine) ParseFile(path string) error {
+	bytes, err := os.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	return engine.ParseString(string(bytes))
+}
+
+func (engine *Engine) ParseString(input string) error {
 	is := antlr.NewInputStream(input)
 	lexer := parser.NewGlibnessLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
@@ -132,22 +172,19 @@ func Parse(input string) ([]Dialogue, error) {
 	p := parser.NewGlibnessParser(stream)
 
 	tree := p.Program()
-	dialogues := make([]Dialogue, 0)
 
 	for _, child := range tree.GetChildren() {
 		if dialogue, ok := child.(parser.IDialogueContext); ok {
-			dialogue, err := parseDialogue(dialogue)
+			dialogue, err := engine.parseDialogue(dialogue)
 
 			if err != nil {
-				return nil, err
+				return err
 			}
 
-			dialogues = append(dialogues, dialogue)
+			engine.Dialogues = append(engine.Dialogues, dialogue)
 
 		}
-
-		// TODO: handle other types
 	}
 
-	return dialogues, nil
+	return nil
 }

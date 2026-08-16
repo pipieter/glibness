@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"glibness/glibness"
-	"os"
 	"time"
 )
 
@@ -18,22 +17,14 @@ func main() {
 	}
 
 	path := args[0]
-	file, err := os.ReadFile(path)
+	engine := glibness.NewEngine()
+	err := engine.ParseFile(path)
 
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	contents := string(file)
-	dialogues, err := glibness.Parse(contents)
-
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	engine := glibness.NewEngine(dialogues)
 	err = engine.Start("main")
 
 	if err != nil {

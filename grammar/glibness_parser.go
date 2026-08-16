@@ -38,7 +38,7 @@ func glibnessParserInit() {
 	}
 	staticData.SymbolicNames = []string{
 		"", "WHITESPACE", "NEWLINE", "DIALOGUE", "SET", "SAY", "CHOOSE", "CHOICE",
-		"RBRACE", "LBRACE", "STRING", "VARIABLE",
+		"RBRACE", "LBRACE", "STRING", "INTEGER", "BOOLEAN", "VARIABLE",
 	}
 	staticData.RuleNames = []string{
 		"program", "dialogue", "statementBlock", "statement", "sayStatement",
@@ -46,7 +46,7 @@ func glibnessParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 11, 90, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 13, 90, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 1, 0, 5,
 		0, 22, 8, 0, 10, 0, 12, 0, 25, 9, 0, 1, 0, 1, 0, 5, 0, 29, 8, 0, 10, 0,
 		12, 0, 32, 9, 0, 5, 0, 34, 8, 0, 10, 0, 12, 0, 37, 9, 0, 1, 0, 1, 0, 1,
@@ -55,31 +55,31 @@ func glibnessParserInit() {
 		4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1,
 		7, 5, 7, 76, 8, 7, 10, 7, 12, 7, 79, 9, 7, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8,
 		1, 8, 1, 8, 1, 9, 1, 9, 1, 9, 0, 0, 10, 0, 2, 4, 6, 8, 10, 12, 14, 16,
-		18, 0, 0, 86, 0, 23, 1, 0, 0, 0, 2, 40, 1, 0, 0, 0, 4, 44, 1, 0, 0, 0,
-		6, 57, 1, 0, 0, 0, 8, 59, 1, 0, 0, 0, 10, 63, 1, 0, 0, 0, 12, 68, 1, 0,
-		0, 0, 14, 72, 1, 0, 0, 0, 16, 82, 1, 0, 0, 0, 18, 87, 1, 0, 0, 0, 20, 22,
-		5, 2, 0, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0, 23, 21, 1, 0, 0, 0,
-		23, 24, 1, 0, 0, 0, 24, 35, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 26, 30, 3,
-		2, 1, 0, 27, 29, 5, 2, 0, 0, 28, 27, 1, 0, 0, 0, 29, 32, 1, 0, 0, 0, 30,
-		28, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 34, 1, 0, 0, 0, 32, 30, 1, 0, 0,
-		0, 33, 26, 1, 0, 0, 0, 34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 35, 36,
-		1, 0, 0, 0, 36, 38, 1, 0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 39, 5, 0, 0, 1,
-		39, 1, 1, 0, 0, 0, 40, 41, 5, 3, 0, 0, 41, 42, 5, 11, 0, 0, 42, 43, 3,
-		4, 2, 0, 43, 3, 1, 0, 0, 0, 44, 45, 5, 9, 0, 0, 45, 49, 5, 2, 0, 0, 46,
-		48, 3, 6, 3, 0, 47, 46, 1, 0, 0, 0, 48, 51, 1, 0, 0, 0, 49, 47, 1, 0, 0,
-		0, 49, 50, 1, 0, 0, 0, 50, 52, 1, 0, 0, 0, 51, 49, 1, 0, 0, 0, 52, 53,
-		5, 8, 0, 0, 53, 5, 1, 0, 0, 0, 54, 58, 3, 8, 4, 0, 55, 58, 3, 10, 5, 0,
-		56, 58, 3, 12, 6, 0, 57, 54, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0, 57, 56, 1,
-		0, 0, 0, 58, 7, 1, 0, 0, 0, 59, 60, 5, 5, 0, 0, 60, 61, 3, 18, 9, 0, 61,
-		62, 5, 2, 0, 0, 62, 9, 1, 0, 0, 0, 63, 64, 5, 4, 0, 0, 64, 65, 5, 11, 0,
-		0, 65, 66, 3, 18, 9, 0, 66, 67, 5, 2, 0, 0, 67, 11, 1, 0, 0, 0, 68, 69,
-		5, 6, 0, 0, 69, 70, 3, 14, 7, 0, 70, 71, 5, 2, 0, 0, 71, 13, 1, 0, 0, 0,
-		72, 73, 5, 9, 0, 0, 73, 77, 5, 2, 0, 0, 74, 76, 3, 16, 8, 0, 75, 74, 1,
-		0, 0, 0, 76, 79, 1, 0, 0, 0, 77, 75, 1, 0, 0, 0, 77, 78, 1, 0, 0, 0, 78,
-		80, 1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 80, 81, 5, 8, 0, 0, 81, 15, 1, 0, 0,
-		0, 82, 83, 5, 7, 0, 0, 83, 84, 5, 10, 0, 0, 84, 85, 3, 4, 2, 0, 85, 86,
-		5, 2, 0, 0, 86, 17, 1, 0, 0, 0, 87, 88, 5, 10, 0, 0, 88, 19, 1, 0, 0, 0,
-		6, 23, 30, 35, 49, 57, 77,
+		18, 0, 1, 1, 0, 10, 13, 86, 0, 23, 1, 0, 0, 0, 2, 40, 1, 0, 0, 0, 4, 44,
+		1, 0, 0, 0, 6, 57, 1, 0, 0, 0, 8, 59, 1, 0, 0, 0, 10, 63, 1, 0, 0, 0, 12,
+		68, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 82, 1, 0, 0, 0, 18, 87, 1, 0, 0,
+		0, 20, 22, 5, 2, 0, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0, 23, 21,
+		1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 35, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0,
+		26, 30, 3, 2, 1, 0, 27, 29, 5, 2, 0, 0, 28, 27, 1, 0, 0, 0, 29, 32, 1,
+		0, 0, 0, 30, 28, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 34, 1, 0, 0, 0, 32,
+		30, 1, 0, 0, 0, 33, 26, 1, 0, 0, 0, 34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0,
+		0, 35, 36, 1, 0, 0, 0, 36, 38, 1, 0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 39,
+		5, 0, 0, 1, 39, 1, 1, 0, 0, 0, 40, 41, 5, 3, 0, 0, 41, 42, 5, 13, 0, 0,
+		42, 43, 3, 4, 2, 0, 43, 3, 1, 0, 0, 0, 44, 45, 5, 9, 0, 0, 45, 49, 5, 2,
+		0, 0, 46, 48, 3, 6, 3, 0, 47, 46, 1, 0, 0, 0, 48, 51, 1, 0, 0, 0, 49, 47,
+		1, 0, 0, 0, 49, 50, 1, 0, 0, 0, 50, 52, 1, 0, 0, 0, 51, 49, 1, 0, 0, 0,
+		52, 53, 5, 8, 0, 0, 53, 5, 1, 0, 0, 0, 54, 58, 3, 8, 4, 0, 55, 58, 3, 10,
+		5, 0, 56, 58, 3, 12, 6, 0, 57, 54, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0, 57,
+		56, 1, 0, 0, 0, 58, 7, 1, 0, 0, 0, 59, 60, 5, 5, 0, 0, 60, 61, 3, 18, 9,
+		0, 61, 62, 5, 2, 0, 0, 62, 9, 1, 0, 0, 0, 63, 64, 5, 4, 0, 0, 64, 65, 5,
+		13, 0, 0, 65, 66, 3, 18, 9, 0, 66, 67, 5, 2, 0, 0, 67, 11, 1, 0, 0, 0,
+		68, 69, 5, 6, 0, 0, 69, 70, 3, 14, 7, 0, 70, 71, 5, 2, 0, 0, 71, 13, 1,
+		0, 0, 0, 72, 73, 5, 9, 0, 0, 73, 77, 5, 2, 0, 0, 74, 76, 3, 16, 8, 0, 75,
+		74, 1, 0, 0, 0, 76, 79, 1, 0, 0, 0, 77, 75, 1, 0, 0, 0, 77, 78, 1, 0, 0,
+		0, 78, 80, 1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 80, 81, 5, 8, 0, 0, 81, 15,
+		1, 0, 0, 0, 82, 83, 5, 7, 0, 0, 83, 84, 5, 10, 0, 0, 84, 85, 3, 4, 2, 0,
+		85, 86, 5, 2, 0, 0, 86, 17, 1, 0, 0, 0, 87, 88, 7, 0, 0, 0, 88, 19, 1,
+		0, 0, 0, 6, 23, 30, 35, 49, 57, 77,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -128,7 +128,9 @@ const (
 	GlibnessParserRBRACE     = 8
 	GlibnessParserLBRACE     = 9
 	GlibnessParserSTRING     = 10
-	GlibnessParserVARIABLE   = 11
+	GlibnessParserINTEGER    = 11
+	GlibnessParserBOOLEAN    = 12
+	GlibnessParserVARIABLE   = 13
 )
 
 // GlibnessParser rules.
@@ -1714,6 +1716,9 @@ type IValueContext interface {
 
 	// Getter signatures
 	STRING() antlr.TerminalNode
+	INTEGER() antlr.TerminalNode
+	BOOLEAN() antlr.TerminalNode
+	VARIABLE() antlr.TerminalNode
 
 	// IsValueContext differentiates from other interfaces.
 	IsValueContext()
@@ -1755,6 +1760,18 @@ func (s *ValueContext) STRING() antlr.TerminalNode {
 	return s.GetToken(GlibnessParserSTRING, 0)
 }
 
+func (s *ValueContext) INTEGER() antlr.TerminalNode {
+	return s.GetToken(GlibnessParserINTEGER, 0)
+}
+
+func (s *ValueContext) BOOLEAN() antlr.TerminalNode {
+	return s.GetToken(GlibnessParserBOOLEAN, 0)
+}
+
+func (s *ValueContext) VARIABLE() antlr.TerminalNode {
+	return s.GetToken(GlibnessParserVARIABLE, 0)
+}
+
 func (s *ValueContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -1778,13 +1795,18 @@ func (s *ValueContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *GlibnessParser) Value() (localctx IValueContext) {
 	localctx = NewValueContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 18, GlibnessParserRULE_value)
+	var _la int
+
 	p.EnterOuterAlt(localctx, 1)
 	{
 		p.SetState(87)
-		p.Match(GlibnessParserSTRING)
-		if p.HasError() {
-			// Recognition error - abort rule
-			goto errorExit
+		_la = p.GetTokenStream().LA(1)
+
+		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&15360) != 0) {
+			p.GetErrorHandler().RecoverInline(p)
+		} else {
+			p.GetErrorHandler().ReportMatch(p)
+			p.Consume()
 		}
 	}
 

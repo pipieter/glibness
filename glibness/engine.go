@@ -13,7 +13,7 @@ type EngineState struct {
 
 type Engine struct {
 	Dialogues []Dialogue
-	Variables map[string]string
+	Variables map[string]Value
 	State     EngineState
 }
 
@@ -41,10 +41,10 @@ type FinishedResponse struct {
 }
 
 // TODO change this
-func NewEngine(dialogues []Dialogue) Engine {
+func NewEngine() Engine {
 	return Engine{
-		Dialogues: dialogues,
-		Variables: make(map[string]string),
+		Dialogues: make([]Dialogue, 0),
+		Variables: make(map[string]Value),
 		State: EngineState{
 			Active:         false,
 			Blocks:         nil,
@@ -66,9 +66,9 @@ func (engine *Engine) Start(name string) error {
 			engine.State.Blocks = []DialogueBlock{block}
 			engine.State.CurrentChoices = nil
 
-			engine.Variables["speaker"] = ""
-			engine.Variables["sentence"] = ""
-			engine.Variables["dialogue"] = name
+			engine.Variables["speaker"] = MakeStringValue("")
+			engine.Variables["sentence"] = MakeStringValue("")
+			engine.Variables["dialogue"] = MakeStringValue(name)
 
 			return nil
 		}
@@ -78,15 +78,15 @@ func (engine *Engine) Start(name string) error {
 }
 
 func (engine Engine) Speaker() string {
-	return engine.Variables["speaker"]
+	return engine.ResolveString(engine.Variables["speaker"].String())
 }
 
 func (engine Engine) Sentence() string {
-	return engine.Variables["sentence"]
+	return engine.ResolveString(engine.Variables["sentence"].String())
 }
 
 func (engine Engine) DialogueName() string {
-	return engine.Variables["dialogue"]
+	return engine.ResolveString(engine.Variables["dialogue"].String())
 }
 
 func (engine *Engine) execute(statement Statement) (StateResponse, error) {
@@ -97,7 +97,7 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	switch statement := statement.(type) {
 
 	case SayStatement:
-		engine.Variables["sentence"] = engine.ResolveString(statement.Sentence)
+		engine.Variables["sentence"] = statement.Sentence
 		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, nil
 
 	case SetStatement:
@@ -115,15 +115,15 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 func (engine *Engine) ResolveString(str string) string {
 	for variable := range engine.Variables {
 		pattern := fmt.Sprintf("{{%s}}", variable)
-		str = strings.ReplaceAll(str, pattern, engine.Variables[variable])
+		str = strings.ReplaceAll(str, pattern, engine.Variables[variable].String())
 	}
 	return str
 }
 
 func (engine *Engine) Finish() error {
-	engine.Variables["speaker"] = ""
-	engine.Variables["sentence"] = ""
-	engine.Variables["dialogue"] = ""
+	engine.Variables["speaker"] = MakeStringValue("")
+	engine.Variables["sentence"] = MakeStringValue("")
+	engine.Variables["dialogue"] = MakeStringValue("")
 	engine.State.Active = false
 	engine.State.Blocks = nil
 	engine.State.CurrentChoices = nil

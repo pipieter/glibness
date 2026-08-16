@@ -26,13 +26,13 @@ type StatementBlock struct {
 
 type SayStatement struct {
 	Statement
-	Sentence string
+	Sentence Value
 }
 
 type SetStatement struct {
 	Statement
 	Variable string
-	Value    string
+	Value    Value
 }
 
 type ChooseStatement struct {
