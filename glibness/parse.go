@@ -127,6 +127,9 @@ func (engine *Engine) parseValue(node parser.IValueContext) (Value, error) {
 	if node.INTEGER() != nil {
 		return engine.parseInteger(node.INTEGER()), nil
 	}
+	if node.VARIABLE() != nil {
+		return engine.parseVariable(node.VARIABLE()), nil
+	}
 
 	return nil, fmt.Errorf("Unsupported value: '%s'", node.GetText())
 }
