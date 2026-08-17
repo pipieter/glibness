@@ -1,7 +1,7 @@
 grammar Glibness;
 
 WHITESPACE: [ \t\f\r]+ -> skip;
-NEWLINE: '\n'+;
+NEWLINE: (WHITESPACE* '\n' WHITESPACE*)+;
 
 DIALOGUE: 'dialogue';
 SET: 'set';
