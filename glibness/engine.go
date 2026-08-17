@@ -88,6 +88,20 @@ func (engine Engine) DialogueName() string {
 	return engine.InterpolateString(engine.Variables["dialogue"].String())
 }
 
+func (engine *Engine) Set(key string, value Value) error {
+	// It's important to evaluate the values here because the set operator
+	// sets the variable by value, not by reference. Pointer-esque operators
+	// are not supported in Glibness.
+	evaluated, err := value.Evaluate(*engine)
+
+	if err != nil {
+		return err
+	} else {
+		engine.Variables[key] = evaluated
+		return nil
+	}
+}
+
 func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	if !engine.State.Active {
 		return FinishedResponse{}, fmt.Errorf("Engine is currently not executing a dialogue.")
@@ -96,17 +110,11 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	switch statement := statement.(type) {
 
 	case SayStatement:
-		engine.Variables["sentence"] = statement.Sentence
-		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, nil
+		err := engine.Set("sentence", statement.Sentence)
+		return SayResponse{Speaker: engine.Speaker(), Sentence: engine.Sentence()}, err
 
 	case SetStatement:
-		// It's important to evaluate the values here because the set operator
-		// sets the variable by value, not by reference. Pointer-esque operators
-		// are not supported in Glibness.
-		evaluated, err := statement.Value.Evaluate(*engine)
-		if err == nil {
-			engine.Variables[statement.Variable] = evaluated
-		}
+		err := engine.Set(statement.Variable, statement.Value)
 		return InternalChangeResponse{Change: "set variable"}, err
 
 	case ChooseStatement:
