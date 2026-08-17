@@ -4,29 +4,35 @@ name: Test C
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.26.5'
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: "1.26.5"
 
-    - name: Build and run tests
-      shell: bash
-      run: |
-        mkdir -p build
-        cd build
-        
-        cmake ..
-        cmake --build .
+      - name: Build tests
+        shell: bash
+        run: |
+          mkdir -p build
+          cd build
 
-        ./glibness_tests
+          cmake ..
+          cmake --build .
+
+      - name: Run tests
+        shell: bash
+        run: ./glibness_tests
+
+      - name: Finish tests
+        shell: bash
+        run: echo "All tests succeeded!"
