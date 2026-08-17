@@ -8,6 +8,7 @@ import (
 
 type Value interface {
 	String() string
+	Type() string
 	Evaluate(engine Engine) (Value, error)
 }
 
@@ -63,6 +64,22 @@ func (variable IntegerValue) String() string {
 func (variable VariableValue) String() string {
 	value := variable.Engine.Variables[variable.Variable].String()
 	return variable.Engine.InterpolateString(value)
+}
+
+func (variable StringValue) Type() string {
+	return "string"
+}
+
+func (variable BooleanValue) Type() string {
+	return "boolean"
+}
+
+func (variable IntegerValue) Type() string {
+	return "integer"
+}
+
+func (variable VariableValue) Type() string {
+	return "variable"
 }
 
 func (variable StringValue) Evaluate(engine Engine) (Value, error) {
