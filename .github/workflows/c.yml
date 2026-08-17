@@ -31,7 +31,7 @@ jobs:
 
       - name: Run tests
         shell: bash
-        run: ./glibness_tests
+        run: ./build/glibness_tests
 
       - name: Finish tests
         shell: bash
