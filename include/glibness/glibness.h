@@ -23,6 +23,9 @@ extern char glib_start(uintptr_t engine, const char* dialogue);
 extern int  glib_next(uintptr_t engine);
 extern char glib_choose(uintptr_t engine, int index);
 
+extern size_t glib_get_choice_count(uintptr_t engine);
+extern size_t glib_get_choice(uintptr_t engine, int index, char* buffer);
+
 extern size_t glib_get_sentence(uintptr_t engine, char* buffer);
 extern size_t glib_get_speaker(uintptr_t engine, char* buffer);
 extern size_t glib_get_error(uintptr_t engine, char* buffer);

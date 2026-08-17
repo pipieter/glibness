@@ -304,4 +304,42 @@ func glib_set_bool(cEngine C.Ptr, cKey *C.char, cValue C.char) C.char {
 	return engine.SetError(err)
 }
 
+//export glib_get_choice_count
+func glib_get_choice_count(cEngine C.Ptr) C.size_t {
+	handle := cgo.Handle(cEngine)
+	engine, _ := handle.Value().(*CEngine)
+
+	if engine.Engine.State.CurrentChoices == nil {
+		return C.size_t(0)
+	}
+
+	return C.size_t(len(engine.Engine.State.CurrentChoices))
+}
+
+//export glib_get_choice
+func glib_get_choice(cEngine C.Ptr, cIndex C.int, buffer *C.char) C.size_t {
+	handle := cgo.Handle(cEngine)
+	engine, _ := handle.Value().(*CEngine)
+
+	index := int(cIndex)
+
+	if engine.Engine.State.CurrentChoices == nil {
+		engine.SetError(fmt.Errorf("No choice active at the moment."))
+		return C.size_t(0)
+	}
+
+	if index < 0 {
+		engine.SetError(fmt.Errorf("Choice index must be at least zero."))
+		return C.size_t(0)
+	}
+
+	if index >= len(engine.Engine.State.CurrentChoices) {
+		engine.SetError(fmt.Errorf("Choice index %d was given, but only %d choices are available.", index, len(engine.Engine.State.CurrentChoices)))
+		return C.size_t(0)
+	}
+
+	choice := engine.Engine.State.CurrentChoices[index]
+	return copyStringToCBuffer(choice.Name, buffer)
+}
+
 func main() {}
