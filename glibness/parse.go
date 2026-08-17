@@ -186,6 +186,8 @@ func (engine *Engine) ParseString(input string) error {
 
 			engine.Dialogues = append(engine.Dialogues, dialogue)
 
+		} else {
+			return fmt.Errorf("Could not parse %s.", child)
 		}
 	}
 

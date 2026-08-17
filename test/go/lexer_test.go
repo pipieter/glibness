@@ -19,3 +19,14 @@ func TestTrailingWhitespace(t *testing.T) {
 	`)
 	assert.Nil(err)
 }
+
+func TestMissingClosingBracket(t *testing.T) {
+	assert := assert.New(t)
+	engine := glibness.NewEngine()
+
+	err := engine.ParseString(`
+		dialogue test {
+			say "This is a dialogue without a closing bracket."
+	`)
+	assert.NotNil(err)
+}
