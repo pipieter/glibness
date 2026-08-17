@@ -35,7 +35,11 @@ func TestVariables(t *testing.T) {
 			set my_copy_2 my_copy_1
 			set my_copy_1 my_copy_2
 			set my_copy_2 my_copy_1
-			set my_copy_1 my_copy_2			
+			set my_copy_1 my_copy_2
+			
+			set my_interpolated_value  1
+			set my_interpolated_string "interpolated {{my_interpolated_value}}"
+			set my_interpolated_value  2
 		}
 	`)
 	assert.Nil(err)
@@ -74,5 +78,10 @@ func TestVariables(t *testing.T) {
 	assert.IsType(engine.Variables["my_copy_2"], glibness.BooleanValue{})
 	assert.Equal(engine.Variables["my_copy_1"].String(), "true")
 	assert.Equal(engine.Variables["my_copy_2"].String(), "true")
+
+	assert.IsType(engine.Variables["my_interpolated_value"], glibness.IntegerValue{})
+	assert.IsType(engine.Variables["my_interpolated_string"], glibness.StringValue{})
+	assert.Equal(engine.Variables["my_interpolated_value"].String(), "2")
+	assert.Equal(engine.Variables["my_interpolated_string"].String(), "interpolated 1")
 
 }
