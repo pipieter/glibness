@@ -18,12 +18,7 @@ type GlibnessListener struct {
 func (engine *Engine) parseDialogue(node parser.IDialogueContext) (Dialogue, error) {
 	name := node.GetName().GetText()
 	statements, err := engine.parseStatementBlock(node.StatementBlock(), nil)
-
-	if err != nil {
-		return Dialogue{}, err
-	}
-
-	return Dialogue{Name: name, Root: statements}, nil
+	return Dialogue{Name: name, Root: statements}, err
 }
 
 func (engine *Engine) parseStatementBlock(node parser.IStatementBlockContext, parent *StatementBlock) (StatementBlock, error) {
@@ -171,25 +166,26 @@ func (engine *Engine) ParseString(input string) error {
 	is := antlr.NewInputStream(input)
 	lexer := parser.NewGlibnessLexer(is)
 	stream := antlr.NewCommonTokenStream(lexer, antlr.TokenDefaultChannel)
+	parse := parser.NewGlibnessParser(stream)
 
-	p := parser.NewGlibnessParser(stream)
+	// By default, antlr4 prints errors out to the console. In our case,
+	// we want to capture errors and return them, so we need to create a
+	// special error capture class.
+	errorCapture := &ErrorCapture{Errors: make([]string, 0)}
+	parse.RemoveErrorListeners()
+	parse.AddErrorListener(errorCapture)
 
-	tree := p.Program()
+	tree := parse.Program()
 
-	for _, child := range tree.GetChildren() {
-		if dialogue, ok := child.(parser.IDialogueContext); ok {
-			dialogue, err := engine.parseDialogue(dialogue)
+	for _, child := range tree.AllDialogue() {
+		dialogue, err := engine.parseDialogue(child)
 
-			if err != nil {
-				return err
-			}
-
-			engine.Dialogues = append(engine.Dialogues, dialogue)
-
-		} else {
-			return fmt.Errorf("Could not parse %s.", child)
+		if err != nil {
+			return err
 		}
+
+		engine.Dialogues = append(engine.Dialogues, dialogue)
 	}
 
-	return nil
+	return errorCapture.Error()
 }

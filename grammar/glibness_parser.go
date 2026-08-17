@@ -46,40 +46,43 @@ func glibnessParserInit() {
 	}
 	staticData.PredictionContextCache = antlr.NewPredictionContextCache()
 	staticData.serializedATN = []int32{
-		4, 1, 13, 90, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
+		4, 1, 13, 97, 2, 0, 7, 0, 2, 1, 7, 1, 2, 2, 7, 2, 2, 3, 7, 3, 2, 4, 7,
 		4, 2, 5, 7, 5, 2, 6, 7, 6, 2, 7, 7, 7, 2, 8, 7, 8, 2, 9, 7, 9, 1, 0, 5,
 		0, 22, 8, 0, 10, 0, 12, 0, 25, 9, 0, 1, 0, 1, 0, 5, 0, 29, 8, 0, 10, 0,
-		12, 0, 32, 9, 0, 5, 0, 34, 8, 0, 10, 0, 12, 0, 37, 9, 0, 1, 0, 1, 0, 1,
-		1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 2, 5, 2, 48, 8, 2, 10, 2, 12, 2, 51,
-		9, 2, 1, 2, 1, 2, 1, 3, 1, 3, 1, 3, 3, 3, 58, 8, 3, 1, 4, 1, 4, 1, 4, 1,
-		4, 1, 5, 1, 5, 1, 5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1,
-		7, 5, 7, 76, 8, 7, 10, 7, 12, 7, 79, 9, 7, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8,
-		1, 8, 1, 8, 1, 9, 1, 9, 1, 9, 0, 0, 10, 0, 2, 4, 6, 8, 10, 12, 14, 16,
-		18, 0, 1, 1, 0, 10, 13, 86, 0, 23, 1, 0, 0, 0, 2, 40, 1, 0, 0, 0, 4, 44,
-		1, 0, 0, 0, 6, 57, 1, 0, 0, 0, 8, 59, 1, 0, 0, 0, 10, 63, 1, 0, 0, 0, 12,
-		68, 1, 0, 0, 0, 14, 72, 1, 0, 0, 0, 16, 82, 1, 0, 0, 0, 18, 87, 1, 0, 0,
-		0, 20, 22, 5, 2, 0, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0, 23, 21,
-		1, 0, 0, 0, 23, 24, 1, 0, 0, 0, 24, 35, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0,
-		26, 30, 3, 2, 1, 0, 27, 29, 5, 2, 0, 0, 28, 27, 1, 0, 0, 0, 29, 32, 1,
-		0, 0, 0, 30, 28, 1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 34, 1, 0, 0, 0, 32,
-		30, 1, 0, 0, 0, 33, 26, 1, 0, 0, 0, 34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0,
-		0, 35, 36, 1, 0, 0, 0, 36, 38, 1, 0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 39,
-		5, 0, 0, 1, 39, 1, 1, 0, 0, 0, 40, 41, 5, 3, 0, 0, 41, 42, 5, 13, 0, 0,
-		42, 43, 3, 4, 2, 0, 43, 3, 1, 0, 0, 0, 44, 45, 5, 9, 0, 0, 45, 49, 5, 2,
-		0, 0, 46, 48, 3, 6, 3, 0, 47, 46, 1, 0, 0, 0, 48, 51, 1, 0, 0, 0, 49, 47,
-		1, 0, 0, 0, 49, 50, 1, 0, 0, 0, 50, 52, 1, 0, 0, 0, 51, 49, 1, 0, 0, 0,
-		52, 53, 5, 8, 0, 0, 53, 5, 1, 0, 0, 0, 54, 58, 3, 8, 4, 0, 55, 58, 3, 10,
-		5, 0, 56, 58, 3, 12, 6, 0, 57, 54, 1, 0, 0, 0, 57, 55, 1, 0, 0, 0, 57,
-		56, 1, 0, 0, 0, 58, 7, 1, 0, 0, 0, 59, 60, 5, 5, 0, 0, 60, 61, 3, 18, 9,
-		0, 61, 62, 5, 2, 0, 0, 62, 9, 1, 0, 0, 0, 63, 64, 5, 4, 0, 0, 64, 65, 5,
-		13, 0, 0, 65, 66, 3, 18, 9, 0, 66, 67, 5, 2, 0, 0, 67, 11, 1, 0, 0, 0,
-		68, 69, 5, 6, 0, 0, 69, 70, 3, 14, 7, 0, 70, 71, 5, 2, 0, 0, 71, 13, 1,
-		0, 0, 0, 72, 73, 5, 9, 0, 0, 73, 77, 5, 2, 0, 0, 74, 76, 3, 16, 8, 0, 75,
-		74, 1, 0, 0, 0, 76, 79, 1, 0, 0, 0, 77, 75, 1, 0, 0, 0, 77, 78, 1, 0, 0,
-		0, 78, 80, 1, 0, 0, 0, 79, 77, 1, 0, 0, 0, 80, 81, 5, 8, 0, 0, 81, 15,
-		1, 0, 0, 0, 82, 83, 5, 7, 0, 0, 83, 84, 5, 10, 0, 0, 84, 85, 3, 4, 2, 0,
-		85, 86, 5, 2, 0, 0, 86, 17, 1, 0, 0, 0, 87, 88, 7, 0, 0, 0, 88, 19, 1,
-		0, 0, 0, 6, 23, 30, 35, 49, 57, 77,
+		12, 0, 32, 9, 0, 5, 0, 34, 8, 0, 10, 0, 12, 0, 37, 9, 0, 1, 0, 5, 0, 40,
+		8, 0, 10, 0, 12, 0, 43, 9, 0, 1, 0, 3, 0, 46, 8, 0, 1, 1, 1, 1, 1, 1, 1,
+		1, 1, 2, 1, 2, 1, 2, 5, 2, 55, 8, 2, 10, 2, 12, 2, 58, 9, 2, 1, 2, 1, 2,
+		1, 3, 1, 3, 1, 3, 3, 3, 65, 8, 3, 1, 4, 1, 4, 1, 4, 1, 4, 1, 5, 1, 5, 1,
+		5, 1, 5, 1, 5, 1, 6, 1, 6, 1, 6, 1, 6, 1, 7, 1, 7, 1, 7, 5, 7, 83, 8, 7,
+		10, 7, 12, 7, 86, 9, 7, 1, 7, 1, 7, 1, 8, 1, 8, 1, 8, 1, 8, 1, 8, 1, 9,
+		1, 9, 1, 9, 0, 0, 10, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 0, 1, 1, 0, 10,
+		13, 95, 0, 23, 1, 0, 0, 0, 2, 47, 1, 0, 0, 0, 4, 51, 1, 0, 0, 0, 6, 64,
+		1, 0, 0, 0, 8, 66, 1, 0, 0, 0, 10, 70, 1, 0, 0, 0, 12, 75, 1, 0, 0, 0,
+		14, 79, 1, 0, 0, 0, 16, 89, 1, 0, 0, 0, 18, 94, 1, 0, 0, 0, 20, 22, 5,
+		2, 0, 0, 21, 20, 1, 0, 0, 0, 22, 25, 1, 0, 0, 0, 23, 21, 1, 0, 0, 0, 23,
+		24, 1, 0, 0, 0, 24, 35, 1, 0, 0, 0, 25, 23, 1, 0, 0, 0, 26, 30, 3, 2, 1,
+		0, 27, 29, 5, 2, 0, 0, 28, 27, 1, 0, 0, 0, 29, 32, 1, 0, 0, 0, 30, 28,
+		1, 0, 0, 0, 30, 31, 1, 0, 0, 0, 31, 34, 1, 0, 0, 0, 32, 30, 1, 0, 0, 0,
+		33, 26, 1, 0, 0, 0, 34, 37, 1, 0, 0, 0, 35, 33, 1, 0, 0, 0, 35, 36, 1,
+		0, 0, 0, 36, 41, 1, 0, 0, 0, 37, 35, 1, 0, 0, 0, 38, 40, 5, 2, 0, 0, 39,
+		38, 1, 0, 0, 0, 40, 43, 1, 0, 0, 0, 41, 39, 1, 0, 0, 0, 41, 42, 1, 0, 0,
+		0, 42, 45, 1, 0, 0, 0, 43, 41, 1, 0, 0, 0, 44, 46, 5, 0, 0, 1, 45, 44,
+		1, 0, 0, 0, 45, 46, 1, 0, 0, 0, 46, 1, 1, 0, 0, 0, 47, 48, 5, 3, 0, 0,
+		48, 49, 5, 13, 0, 0, 49, 50, 3, 4, 2, 0, 50, 3, 1, 0, 0, 0, 51, 52, 5,
+		9, 0, 0, 52, 56, 5, 2, 0, 0, 53, 55, 3, 6, 3, 0, 54, 53, 1, 0, 0, 0, 55,
+		58, 1, 0, 0, 0, 56, 54, 1, 0, 0, 0, 56, 57, 1, 0, 0, 0, 57, 59, 1, 0, 0,
+		0, 58, 56, 1, 0, 0, 0, 59, 60, 5, 8, 0, 0, 60, 5, 1, 0, 0, 0, 61, 65, 3,
+		8, 4, 0, 62, 65, 3, 10, 5, 0, 63, 65, 3, 12, 6, 0, 64, 61, 1, 0, 0, 0,
+		64, 62, 1, 0, 0, 0, 64, 63, 1, 0, 0, 0, 65, 7, 1, 0, 0, 0, 66, 67, 5, 5,
+		0, 0, 67, 68, 3, 18, 9, 0, 68, 69, 5, 2, 0, 0, 69, 9, 1, 0, 0, 0, 70, 71,
+		5, 4, 0, 0, 71, 72, 5, 13, 0, 0, 72, 73, 3, 18, 9, 0, 73, 74, 5, 2, 0,
+		0, 74, 11, 1, 0, 0, 0, 75, 76, 5, 6, 0, 0, 76, 77, 3, 14, 7, 0, 77, 78,
+		5, 2, 0, 0, 78, 13, 1, 0, 0, 0, 79, 80, 5, 9, 0, 0, 80, 84, 5, 2, 0, 0,
+		81, 83, 3, 16, 8, 0, 82, 81, 1, 0, 0, 0, 83, 86, 1, 0, 0, 0, 84, 82, 1,
+		0, 0, 0, 84, 85, 1, 0, 0, 0, 85, 87, 1, 0, 0, 0, 86, 84, 1, 0, 0, 0, 87,
+		88, 5, 8, 0, 0, 88, 15, 1, 0, 0, 0, 89, 90, 5, 7, 0, 0, 90, 91, 5, 10,
+		0, 0, 91, 92, 3, 4, 2, 0, 92, 93, 5, 2, 0, 0, 93, 17, 1, 0, 0, 0, 94, 95,
+		7, 0, 0, 0, 95, 19, 1, 0, 0, 0, 8, 23, 30, 35, 41, 45, 56, 64, 84,
 	}
 	deserializer := antlr.NewATNDeserializer(nil)
 	staticData.atn = deserializer.Deserialize(staticData.serializedATN)
@@ -155,11 +158,11 @@ type IProgramContext interface {
 	GetParser() antlr.Parser
 
 	// Getter signatures
-	EOF() antlr.TerminalNode
 	AllNEWLINE() []antlr.TerminalNode
 	NEWLINE(i int) antlr.TerminalNode
 	AllDialogue() []IDialogueContext
 	Dialogue(i int) IDialogueContext
+	EOF() antlr.TerminalNode
 
 	// IsProgramContext differentiates from other interfaces.
 	IsProgramContext()
@@ -196,10 +199,6 @@ func NewProgramContext(parser antlr.Parser, parent antlr.ParserRuleContext, invo
 }
 
 func (s *ProgramContext) GetParser() antlr.Parser { return s.parser }
-
-func (s *ProgramContext) EOF() antlr.TerminalNode {
-	return s.GetToken(GlibnessParserEOF, 0)
-}
 
 func (s *ProgramContext) AllNEWLINE() []antlr.TerminalNode {
 	return s.GetTokens(GlibnessParserNEWLINE)
@@ -250,6 +249,10 @@ func (s *ProgramContext) Dialogue(i int) IDialogueContext {
 	return t.(IDialogueContext)
 }
 
+func (s *ProgramContext) EOF() antlr.TerminalNode {
+	return s.GetToken(GlibnessParserEOF, 0)
+}
+
 func (s *ProgramContext) GetRuleContext() antlr.RuleContext {
 	return s
 }
@@ -275,30 +278,39 @@ func (p *GlibnessParser) Program() (localctx IProgramContext) {
 	p.EnterRule(localctx, 0, GlibnessParserRULE_program)
 	var _la int
 
+	var _alt int
+
 	p.EnterOuterAlt(localctx, 1)
 	p.SetState(23)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
 	}
-	_la = p.GetTokenStream().LA(1)
-
-	for _la == GlibnessParserNEWLINE {
-		{
-			p.SetState(20)
-			p.Match(GlibnessParserNEWLINE)
-			if p.HasError() {
-				// Recognition error - abort rule
-				goto errorExit
+	_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 0, p.GetParserRuleContext())
+	if p.HasError() {
+		goto errorExit
+	}
+	for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+		if _alt == 1 {
+			{
+				p.SetState(20)
+				p.Match(GlibnessParserNEWLINE)
+				if p.HasError() {
+					// Recognition error - abort rule
+					goto errorExit
+				}
 			}
-		}
 
+		}
 		p.SetState(25)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
 		}
-		_la = p.GetTokenStream().LA(1)
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 0, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
 	}
 	p.SetState(35)
 	p.GetErrorHandler().Sync(p)
@@ -317,24 +329,31 @@ func (p *GlibnessParser) Program() (localctx IProgramContext) {
 		if p.HasError() {
 			goto errorExit
 		}
-		_la = p.GetTokenStream().LA(1)
-
-		for _la == GlibnessParserNEWLINE {
-			{
-				p.SetState(27)
-				p.Match(GlibnessParserNEWLINE)
-				if p.HasError() {
-					// Recognition error - abort rule
-					goto errorExit
+		_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext())
+		if p.HasError() {
+			goto errorExit
+		}
+		for _alt != 2 && _alt != antlr.ATNInvalidAltNumber {
+			if _alt == 1 {
+				{
+					p.SetState(27)
+					p.Match(GlibnessParserNEWLINE)
+					if p.HasError() {
+						// Recognition error - abort rule
+						goto errorExit
+					}
 				}
-			}
 
+			}
 			p.SetState(32)
 			p.GetErrorHandler().Sync(p)
 			if p.HasError() {
 				goto errorExit
 			}
-			_la = p.GetTokenStream().LA(1)
+			_alt = p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 1, p.GetParserRuleContext())
+			if p.HasError() {
+				goto errorExit
+			}
 		}
 
 		p.SetState(37)
@@ -344,13 +363,45 @@ func (p *GlibnessParser) Program() (localctx IProgramContext) {
 		}
 		_la = p.GetTokenStream().LA(1)
 	}
-	{
-		p.SetState(38)
-		p.Match(GlibnessParserEOF)
+	p.SetState(41)
+	p.GetErrorHandler().Sync(p)
+	if p.HasError() {
+		goto errorExit
+	}
+	_la = p.GetTokenStream().LA(1)
+
+	for _la == GlibnessParserNEWLINE {
+		{
+			p.SetState(38)
+			p.Match(GlibnessParserNEWLINE)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+		p.SetState(43)
+		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
-			// Recognition error - abort rule
 			goto errorExit
 		}
+		_la = p.GetTokenStream().LA(1)
+	}
+	p.SetState(45)
+	p.GetErrorHandler().Sync(p)
+
+	if p.GetInterpreter().AdaptivePredict(p.BaseParser, p.GetTokenStream(), 4, p.GetParserRuleContext()) == 1 {
+		{
+			p.SetState(44)
+			p.Match(GlibnessParserEOF)
+			if p.HasError() {
+				// Recognition error - abort rule
+				goto errorExit
+			}
+		}
+
+	} else if p.HasError() { // JIM
+		goto errorExit
 	}
 
 errorExit:
@@ -485,7 +536,7 @@ func (p *GlibnessParser) Dialogue() (localctx IDialogueContext) {
 	p.EnterRule(localctx, 2, GlibnessParserRULE_dialogue)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(40)
+		p.SetState(47)
 		p.Match(GlibnessParserDIALOGUE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -493,7 +544,7 @@ func (p *GlibnessParser) Dialogue() (localctx IDialogueContext) {
 		}
 	}
 	{
-		p.SetState(41)
+		p.SetState(48)
 
 		var _m = p.Match(GlibnessParserVARIABLE)
 
@@ -504,7 +555,7 @@ func (p *GlibnessParser) Dialogue() (localctx IDialogueContext) {
 		}
 	}
 	{
-		p.SetState(42)
+		p.SetState(49)
 
 		var _x = p.StatementBlock()
 
@@ -654,7 +705,7 @@ func (p *GlibnessParser) StatementBlock() (localctx IStatementBlockContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(44)
+		p.SetState(51)
 		p.Match(GlibnessParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -662,14 +713,14 @@ func (p *GlibnessParser) StatementBlock() (localctx IStatementBlockContext) {
 		}
 	}
 	{
-		p.SetState(45)
+		p.SetState(52)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(49)
+	p.SetState(56)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -678,11 +729,11 @@ func (p *GlibnessParser) StatementBlock() (localctx IStatementBlockContext) {
 
 	for (int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&112) != 0 {
 		{
-			p.SetState(46)
+			p.SetState(53)
 			p.Statement()
 		}
 
-		p.SetState(51)
+		p.SetState(58)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -690,7 +741,7 @@ func (p *GlibnessParser) StatementBlock() (localctx IStatementBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(52)
+		p.SetState(59)
 		p.Match(GlibnessParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -830,7 +881,7 @@ func (s *StatementContext) ExitRule(listener antlr.ParseTreeListener) {
 func (p *GlibnessParser) Statement() (localctx IStatementContext) {
 	localctx = NewStatementContext(p, p.GetParserRuleContext(), p.GetState())
 	p.EnterRule(localctx, 6, GlibnessParserRULE_statement)
-	p.SetState(57)
+	p.SetState(64)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -840,21 +891,21 @@ func (p *GlibnessParser) Statement() (localctx IStatementContext) {
 	case GlibnessParserSAY:
 		p.EnterOuterAlt(localctx, 1)
 		{
-			p.SetState(54)
+			p.SetState(61)
 			p.SayStatement()
 		}
 
 	case GlibnessParserSET:
 		p.EnterOuterAlt(localctx, 2)
 		{
-			p.SetState(55)
+			p.SetState(62)
 			p.SetStatement()
 		}
 
 	case GlibnessParserCHOOSE:
 		p.EnterOuterAlt(localctx, 3)
 		{
-			p.SetState(56)
+			p.SetState(63)
 			p.ChooseStatement()
 		}
 
@@ -984,7 +1035,7 @@ func (p *GlibnessParser) SayStatement() (localctx ISayStatementContext) {
 	p.EnterRule(localctx, 8, GlibnessParserRULE_sayStatement)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(59)
+		p.SetState(66)
 		p.Match(GlibnessParserSAY)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -992,14 +1043,14 @@ func (p *GlibnessParser) SayStatement() (localctx ISayStatementContext) {
 		}
 	}
 	{
-		p.SetState(60)
+		p.SetState(67)
 
 		var _x = p.Value()
 
 		localctx.(*SayStatementContext).val = _x
 	}
 	{
-		p.SetState(61)
+		p.SetState(68)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1144,7 +1195,7 @@ func (p *GlibnessParser) SetStatement() (localctx ISetStatementContext) {
 	p.EnterRule(localctx, 10, GlibnessParserRULE_setStatement)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(63)
+		p.SetState(70)
 		p.Match(GlibnessParserSET)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1152,7 +1203,7 @@ func (p *GlibnessParser) SetStatement() (localctx ISetStatementContext) {
 		}
 	}
 	{
-		p.SetState(64)
+		p.SetState(71)
 
 		var _m = p.Match(GlibnessParserVARIABLE)
 
@@ -1163,14 +1214,14 @@ func (p *GlibnessParser) SetStatement() (localctx ISetStatementContext) {
 		}
 	}
 	{
-		p.SetState(65)
+		p.SetState(72)
 
 		var _x = p.Value()
 
 		localctx.(*SetStatementContext).val = _x
 	}
 	{
-		p.SetState(66)
+		p.SetState(73)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1299,7 +1350,7 @@ func (p *GlibnessParser) ChooseStatement() (localctx IChooseStatementContext) {
 	p.EnterRule(localctx, 12, GlibnessParserRULE_chooseStatement)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(68)
+		p.SetState(75)
 		p.Match(GlibnessParserCHOOSE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1307,14 +1358,14 @@ func (p *GlibnessParser) ChooseStatement() (localctx IChooseStatementContext) {
 		}
 	}
 	{
-		p.SetState(69)
+		p.SetState(76)
 
 		var _x = p.ChoiceBlock()
 
 		localctx.(*ChooseStatementContext).block = _x
 	}
 	{
-		p.SetState(70)
+		p.SetState(77)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1476,7 +1527,7 @@ func (p *GlibnessParser) ChoiceBlock() (localctx IChoiceBlockContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(72)
+		p.SetState(79)
 		p.Match(GlibnessParserLBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1484,14 +1535,14 @@ func (p *GlibnessParser) ChoiceBlock() (localctx IChoiceBlockContext) {
 		}
 	}
 	{
-		p.SetState(73)
+		p.SetState(80)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
 			goto errorExit
 		}
 	}
-	p.SetState(77)
+	p.SetState(84)
 	p.GetErrorHandler().Sync(p)
 	if p.HasError() {
 		goto errorExit
@@ -1500,14 +1551,14 @@ func (p *GlibnessParser) ChoiceBlock() (localctx IChoiceBlockContext) {
 
 	for _la == GlibnessParserCHOICE {
 		{
-			p.SetState(74)
+			p.SetState(81)
 
 			var _x = p.Choice()
 
 			localctx.(*ChoiceBlockContext).choices = _x
 		}
 
-		p.SetState(79)
+		p.SetState(86)
 		p.GetErrorHandler().Sync(p)
 		if p.HasError() {
 			goto errorExit
@@ -1515,7 +1566,7 @@ func (p *GlibnessParser) ChoiceBlock() (localctx IChoiceBlockContext) {
 		_la = p.GetTokenStream().LA(1)
 	}
 	{
-		p.SetState(80)
+		p.SetState(87)
 		p.Match(GlibnessParserRBRACE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1660,7 +1711,7 @@ func (p *GlibnessParser) Choice() (localctx IChoiceContext) {
 	p.EnterRule(localctx, 16, GlibnessParserRULE_choice)
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(82)
+		p.SetState(89)
 		p.Match(GlibnessParserCHOICE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1668,7 +1719,7 @@ func (p *GlibnessParser) Choice() (localctx IChoiceContext) {
 		}
 	}
 	{
-		p.SetState(83)
+		p.SetState(90)
 
 		var _m = p.Match(GlibnessParserSTRING)
 
@@ -1679,14 +1730,14 @@ func (p *GlibnessParser) Choice() (localctx IChoiceContext) {
 		}
 	}
 	{
-		p.SetState(84)
+		p.SetState(91)
 
 		var _x = p.StatementBlock()
 
 		localctx.(*ChoiceContext).block = _x
 	}
 	{
-		p.SetState(85)
+		p.SetState(92)
 		p.Match(GlibnessParserNEWLINE)
 		if p.HasError() {
 			// Recognition error - abort rule
@@ -1799,7 +1850,7 @@ func (p *GlibnessParser) Value() (localctx IValueContext) {
 
 	p.EnterOuterAlt(localctx, 1)
 	{
-		p.SetState(87)
+		p.SetState(94)
 		_la = p.GetTokenStream().LA(1)
 
 		if !((int64(_la) & ^0x3f) == 0 && ((int64(1)<<_la)&15360) != 0) {

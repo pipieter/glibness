@@ -72,7 +72,7 @@ func TestInvalidChoiceTree(t *testing.T) {
 
 	assert := assert.New(t)
 	engine := glibness.NewEngine()
-	engine.ParseString(`
+	err = engine.ParseString(`
 		dialogue test {
 			set speaker "Test"
 			say "This has a choice message, which will be answered with a wrong index!"

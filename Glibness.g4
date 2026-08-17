@@ -1,7 +1,7 @@
 grammar Glibness;
 
-WHITESPACE: [ \t\f\r] -> skip;
-NEWLINE: (WHITESPACE* '\n' WHITESPACE*)+;
+WHITESPACE: [ \t\f\r]+ -> skip;
+NEWLINE: '\n'+;
 
 DIALOGUE: 'dialogue';
 SET: 'set';
@@ -17,7 +17,7 @@ BOOLEAN: 'true' | 'false';
 VARIABLE: [A-Za-z_] [A-Za-z_0-9]*;
 
 
-program: NEWLINE* (dialogue NEWLINE*)* EOF;
+program: NEWLINE* (dialogue NEWLINE*)* NEWLINE* EOF;
 
 dialogue:
 	DIALOGUE name=VARIABLE block=statementBlock;
