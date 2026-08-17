@@ -13,15 +13,15 @@ type Value interface {
 }
 
 type StringValue struct {
-	value string
+	Value string
 }
 
 type BooleanValue struct {
-	value bool
+	Value bool
 }
 
 type IntegerValue struct {
-	value int
+	Value int
 }
 
 type VariableValue struct {
@@ -30,15 +30,15 @@ type VariableValue struct {
 }
 
 func MakeStringValue(value string) StringValue {
-	return StringValue{value: value}
+	return StringValue{Value: value}
 }
 
 func MakeBooleanValue(value bool) BooleanValue {
-	return BooleanValue{value: value}
+	return BooleanValue{Value: value}
 }
 
 func MakeIntValue(value int) IntegerValue {
-	return IntegerValue{value: value}
+	return IntegerValue{Value: value}
 }
 
 func MakeVariableValue(engine *Engine, variable string) VariableValue {
@@ -46,11 +46,11 @@ func MakeVariableValue(engine *Engine, variable string) VariableValue {
 }
 
 func (variable StringValue) String() string {
-	return variable.value
+	return variable.Value
 }
 
 func (variable BooleanValue) String() string {
-	if variable.value {
+	if variable.Value {
 		return "true"
 	} else {
 		return "false"
@@ -58,7 +58,7 @@ func (variable BooleanValue) String() string {
 }
 
 func (variable IntegerValue) String() string {
-	return strconv.Itoa(variable.value)
+	return strconv.Itoa(variable.Value)
 }
 
 func (variable VariableValue) String() string {
@@ -83,17 +83,17 @@ func (variable VariableValue) Type() string {
 }
 
 func (variable StringValue) Evaluate(engine Engine) (Value, error) {
-	value := variable.value
+	value := variable.Value
 	value = engine.InterpolateString(value)
 	return MakeStringValue(value), nil
 }
 
 func (variable BooleanValue) Evaluate(engine Engine) (Value, error) {
-	return MakeBooleanValue(variable.value), nil
+	return MakeBooleanValue(variable.Value), nil
 }
 
 func (variable IntegerValue) Evaluate(engine Engine) (Value, error) {
-	return MakeIntValue(variable.value), nil
+	return MakeIntValue(variable.Value), nil
 }
 
 func (variable VariableValue) Evaluate(engine Engine) (Value, error) {
@@ -105,13 +105,13 @@ func (variable VariableValue) Evaluate(engine Engine) (Value, error) {
 		return value.Evaluate(engine)
 
 	case StringValue:
-		return MakeStringValue(value.value), nil
+		return MakeStringValue(value.Value), nil
 
 	case IntegerValue:
-		return MakeIntValue(value.value), nil
+		return MakeIntValue(value.Value), nil
 
 	case BooleanValue:
-		return MakeBooleanValue(value.value), nil
+		return MakeBooleanValue(value.Value), nil
 	}
 
 	return VariableValue{}, fmt.Errorf("Unsupported Value.Evaluate: '%s'", reflect.TypeOf(value))
