@@ -73,3 +73,51 @@ void test_basic_set_get() {
 
     glib_free_engine(engine);
 }
+
+void test_basic_choice() {
+    uintptr_t engine = glib_new_engine();
+    assert(engine);
+
+    const char* script =
+        "dialogue test {\n"
+        "  choose {\n"
+        "     choice \"A\" {\n"
+        "        say \"A.1\"\n"
+        "     }\n"
+        "     choice \"BB\" {\n"
+        "        say \"B.1\"\n"
+        "        say \"B.2\"\n"
+        "     }\n"
+        "     choice \"CCC\" {\n"
+        "        say \"C.1\"\n"
+        "     }\n"
+        "  }\n"
+        "}";
+
+    char choiceA[8];
+    char choiceB[8];
+    char choiceC[8];
+    char choiceX[8];
+
+    assert(glib_load_string(engine, script));
+    assert(glib_start(engine, "test"));
+    assert(glib_next(engine) == GLIB_RESPONSE_CHOICE);
+
+    assert(glib_get_choice_count(engine) == 3);
+    assert(glib_get_choice(engine, 0, choiceA));
+    assert(glib_get_choice(engine, 1, choiceB));
+    assert(glib_get_choice(engine, 2, choiceC));
+
+    assert(!glib_get_choice(engine, 37, choiceX));
+    assert(!glib_get_choice(engine, -2, choiceX));
+
+    assert(strcmp(choiceA, "A") == 0);
+    assert(strcmp(choiceB, "BB") == 0);
+    assert(strcmp(choiceC, "CCC") == 0);
+
+    assert(glib_choose(engine, 0));
+    assert(glib_next(engine) == GLIB_RESPONSE_SAY);
+    assert(glib_next(engine) == GLIB_RESPONSE_FINISHED);
+
+    glib_free_engine(engine);
+}
