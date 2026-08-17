@@ -1,6 +1,6 @@
-definitions {
-    set global player_level = 3
-    set global player_species = "human"
-    set global player_class = "fighter"
-    set global player_subclass = "champion"
+dialogue main {
+    set player.level            3
+    set player.species    "human"
+    set player.class    "fighter"
+    set player.subclass"champion"
 }

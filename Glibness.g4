@@ -14,7 +14,7 @@ LBRACE: '{';
 STRING: '"' (~["\n])* '"' ;
 INTEGER: [0-9]+;
 BOOLEAN: 'true' | 'false';
-VARIABLE: [A-Za-z_] [A-Za-z_0-9]*;
+VARIABLE: [A-Za-z_] [A-Za-z_0-9.]*;
 
 
 program: NEWLINE* (dialogue NEWLINE*)* NEWLINE* EOF;

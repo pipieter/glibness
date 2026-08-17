@@ -40,6 +40,8 @@ func TestVariables(t *testing.T) {
 			set my_interpolated_value  1
 			set my_interpolated_string "interpolated {{my_interpolated_value}}"
 			set my_interpolated_value  2
+
+			set dotted.object "dotted"
 		}
 	`)
 	assert.Nil(err)
@@ -84,4 +86,6 @@ func TestVariables(t *testing.T) {
 	assert.Equal(engine.Variables["my_interpolated_value"].String(), "2")
 	assert.Equal(engine.Variables["my_interpolated_string"].String(), "interpolated 1")
 
+	assert.IsType(engine.Variables["dotted.object"], glibness.StringValue{})
+	assert.Equal(engine.Variables["dotted.object"].String(), "dotted")
 }
