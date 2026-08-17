@@ -77,15 +77,15 @@ func (engine *Engine) Start(name string) error {
 }
 
 func (engine Engine) Speaker() string {
-	return engine.ResolveString(engine.Variables["speaker"].String())
+	return engine.InterpolateString(engine.Variables["speaker"].String())
 }
 
 func (engine Engine) Sentence() string {
-	return engine.ResolveString(engine.Variables["sentence"].String())
+	return engine.InterpolateString(engine.Variables["sentence"].String())
 }
 
 func (engine Engine) DialogueName() string {
-	return engine.ResolveString(engine.Variables["dialogue"].String())
+	return engine.InterpolateString(engine.Variables["dialogue"].String())
 }
 
 func (engine *Engine) execute(statement Statement) (StateResponse, error) {
@@ -103,7 +103,7 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 		// It's important to evaluate the values here because the set operator
 		// sets the variable by value, not by reference. Pointer-esque operators
 		// are not supported in Glibness.
-		evaluated, err := statement.Value.Evaluate()
+		evaluated, err := statement.Value.Evaluate(*engine)
 		if err == nil {
 			engine.Variables[statement.Variable] = evaluated
 		}
@@ -117,7 +117,7 @@ func (engine *Engine) execute(statement Statement) (StateResponse, error) {
 	return FinishedResponse{}, fmt.Errorf("Unsupported statement: %s", statement.String())
 }
 
-func (engine *Engine) ResolveString(str string) string {
+func (engine *Engine) InterpolateString(str string) string {
 	for variable := range engine.Variables {
 		pattern := fmt.Sprintf("{{%s}}", variable)
 		str = strings.ReplaceAll(str, pattern, engine.Variables[variable].String())
