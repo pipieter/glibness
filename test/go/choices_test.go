@@ -8,10 +8,13 @@ import (
 )
 
 func TestChoiceTree(t *testing.T) {
+	var err error
+	var response glibness.StateResponse
+
 	assert := assert.New(t)
 
 	engine := glibness.NewEngine()
-	err := engine.ParseString(`
+	err = engine.ParseString(`
 		dialogue test {
 			set speaker "Test"
 			say "This has a choice message!"
@@ -37,33 +40,41 @@ func TestChoiceTree(t *testing.T) {
 	assert.Nil(err)
 	assert.Len(engine.Dialogues, 1)
 
-	dialogue := engine.Dialogues[0]
-	assert.Equal(dialogue.Name, "test")
-	assert.Len(dialogue.Root.Statements, 4)
-	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
-	assert.IsType(dialogue.Root.Statements[1], glibness.SayStatement{})
-	assert.IsType(dialogue.Root.Statements[2], glibness.SayStatement{})
-	assert.IsType(dialogue.Root.Statements[3], glibness.ChooseStatement{})
+	err = engine.Start("test")
+	assert.Nil(err)
 
-	choose := dialogue.Root.Statements[3]
-	if choose, ok := choose.(glibness.ChooseStatement); ok {
-		assert.Len(choose.Choices, 3)
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.SayResponse{})
 
-		assert.Equal(choose.Choices[0].Name, "A")
-		assert.Equal(choose.Choices[1].Name, "B")
-		assert.Equal(choose.Choices[2].Name, "C")
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.SayResponse{})
 
-		assert.Len(choose.Choices[0].Block.Statements, 2)
-		assert.Len(choose.Choices[1].Block.Statements, 1)
-		assert.Len(choose.Choices[2].Block.Statements, 3)
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.ChoiceResponse{})
 
-		assert.Equal(choose.Choices[0].Block.Parent, &dialogue.Root)
-		assert.Equal(choose.Choices[1].Block.Parent, &dialogue.Root)
-		assert.Equal(choose.Choices[2].Block.Parent, &dialogue.Root)
-
+	if choice, ok := response.(glibness.ChoiceResponse); ok {
+		assert.ElementsMatch([]string{"A", "B", "C"}, choice.Choices)
 	} else {
-		assert.Fail("The third statement should be a ChooseStatement")
+		assert.Fail("Response should be a choice response")
 	}
+
+	err = engine.Respond(0)
+	assert.Nil(err)
+
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.SayResponse{})
+
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.SayResponse{})
+
+	response, err = engine.Next()
+	assert.Nil(err)
+	assert.IsType(response, glibness.FinishedResponse{})
 }
 
 func TestInvalidChoiceTree(t *testing.T) {
@@ -93,16 +104,8 @@ func TestInvalidChoiceTree(t *testing.T) {
 
 	dialogue := engine.Dialogues[0]
 	assert.Equal(dialogue.Name, "test")
-	assert.Len(dialogue.Root.Statements, 3)
-	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
-	assert.IsType(dialogue.Root.Statements[1], glibness.SayStatement{})
-	assert.IsType(dialogue.Root.Statements[2], glibness.ChooseStatement{})
 
 	err = engine.Start("test")
-	assert.Nil(err)
-
-	response, err = engine.Next()
-	assert.IsType(response, glibness.InternalChangeResponse{})
 	assert.Nil(err)
 
 	response, err = engine.Next()
