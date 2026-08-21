@@ -220,23 +220,42 @@ func (engine *Engine) Next() (StateResponse, error) {
 }
 
 func (engine *Engine) Respond(index int) error {
-	if !engine.Active() {
-		return fmt.Errorf("The engine state is currently not executing any dialogues.")
-	}
-
-	current, err := engine.State.Statement()
+	choice, err := engine.Choice(index)
 
 	if err != nil {
 		return err
 	}
 
-	if choose, ok := current.(ChooseStatement); ok {
-		if index < 0 || index >= len(choose.Choices) {
-			return fmt.Errorf("Invalid index %d for %d choices", index, len(choose.Choices))
-		}
+	return engine.State.Jump(choice.Label)
+}
 
-		return engine.State.Jump(choose.Choices[index].Label)
+func (engine Engine) Choices() ([]Choice, error) {
+	if !engine.Active() {
+		return nil, fmt.Errorf("The engine state is currently not executing any dialogues.")
 	}
 
-	return fmt.Errorf("Dialogue is currently not expecting a choice.")
+	current, err := engine.State.Statement()
+	if err != nil {
+		return nil, err
+	}
+
+	if choose, ok := current.(ChooseStatement); ok {
+		return choose.Choices, nil
+	}
+
+	return nil, fmt.Errorf("Dialogue is currently not expecting a choice.")
+}
+
+func (engine Engine) Choice(index int) (Choice, error) {
+	choices, err := engine.Choices()
+
+	if err != nil {
+		return Choice{}, nil
+	}
+
+	if index < 0 || index >= len(choices) {
+		return Choice{}, fmt.Errorf("Invalid index %d for %d choices", index, len(choices))
+	}
+
+	return choices[index], nil
 }
