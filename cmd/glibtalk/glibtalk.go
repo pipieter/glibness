@@ -49,7 +49,7 @@ func main() {
 
 		case glibness.ChoiceResponse:
 			for i, choice := range response.Choices {
-				fmt.Printf("%d. %s\n", i+1, choice.Name)
+				fmt.Printf("%d. %s\n", i+1, choice)
 			}
 
 			validAnswer := false

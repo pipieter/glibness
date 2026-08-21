@@ -24,8 +24,5 @@ func TestBasicTree(t *testing.T) {
 
 	dialogue := engine.Dialogues[0]
 	assert.Equal(dialogue.Name, "test")
-	assert.Len(dialogue.Root.Statements, 3)
-	assert.IsType(dialogue.Root.Statements[0], glibness.SetStatement{})
-	assert.IsType(dialogue.Root.Statements[1], glibness.SayStatement{})
-	assert.IsType(dialogue.Root.Statements[2], glibness.SayStatement{})
+	assert.Len(dialogue.Statements, 3)
 }

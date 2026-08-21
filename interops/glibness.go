@@ -20,7 +20,6 @@ const (
 	GLIB_RESPONSE_ERROR
 	GLIB_RESPONSE_SAY
 	GLIB_RESPONSE_CHOICE
-	GLIB_RESPONSE_INTERNAL_CHANGE
 	GLIB_RESPONSE_FINISHED
 )
 
@@ -95,9 +94,6 @@ func getResponseCode(response glibness.StateResponse) (int, error) {
 
 	case glibness.ChoiceResponse:
 		return GLIB_RESPONSE_CHOICE, nil
-
-	case glibness.InternalChangeResponse:
-		return GLIB_RESPONSE_INTERNAL_CHANGE, nil
 
 	case glibness.FinishedResponse:
 		return GLIB_RESPONSE_FINISHED, nil
@@ -181,7 +177,7 @@ func glib_is_active(cEngine C.Ptr) C.char {
 	handle := cgo.Handle(cEngine)
 	engine, _ := handle.Value().(*CEngine)
 
-	if engine.Engine.State.Active {
+	if engine.Engine.Active() {
 		return C.char(1)
 	} else {
 		return C.char(0)
@@ -309,11 +305,13 @@ func glib_get_choice_count(cEngine C.Ptr) C.size_t {
 	handle := cgo.Handle(cEngine)
 	engine, _ := handle.Value().(*CEngine)
 
-	if engine.Engine.State.CurrentChoices == nil {
+	choices, err := engine.Engine.Choices()
+	if err != nil {
+		engine.SetError(err)
 		return C.size_t(0)
 	}
 
-	return C.size_t(len(engine.Engine.State.CurrentChoices))
+	return C.size_t(len(choices))
 }
 
 //export glib_get_choice
@@ -322,23 +320,13 @@ func glib_get_choice(cEngine C.Ptr, cIndex C.int, buffer *C.char) C.size_t {
 	engine, _ := handle.Value().(*CEngine)
 
 	index := int(cIndex)
+	choice, err := engine.Engine.Choice(index)
 
-	if engine.Engine.State.CurrentChoices == nil {
-		engine.SetError(fmt.Errorf("No choice active at the moment."))
+	if err != nil {
+		engine.SetError(err)
 		return C.size_t(0)
 	}
 
-	if index < 0 {
-		engine.SetError(fmt.Errorf("Choice index must be at least zero."))
-		return C.size_t(0)
-	}
-
-	if index >= len(engine.Engine.State.CurrentChoices) {
-		engine.SetError(fmt.Errorf("Choice index %d was given, but only %d choices are available.", index, len(engine.Engine.State.CurrentChoices)))
-		return C.size_t(0)
-	}
-
-	choice := engine.Engine.State.CurrentChoices[index]
 	return copyStringToCBuffer(choice.Name, buffer)
 }
 

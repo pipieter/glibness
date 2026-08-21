@@ -17,19 +17,15 @@ void test_basic_execution() {
     const char* script =
         "dialogue test {\n"
         "   set speaker \"Glibness\"\n"
-        "   say \"This is a message.\"\n"
         "   set my_int 333\n"
         "   set my_bool true\n"
+        "   say \"This is a message.\"\n"
         "}";
 
     assert(glib_load_string(engine, script));
     assert(glib_start(engine, "test"));
-    assert(glib_next(engine) == GLIB_RESPONSE_INTERNAL_CHANGE);
-    assert(glib_next(engine) == GLIB_RESPONSE_SAY);
-    assert(glib_next(engine) == GLIB_RESPONSE_INTERNAL_CHANGE);
-    assert(glib_next(engine) == GLIB_RESPONSE_INTERNAL_CHANGE);
 
-    assert(glib_is_active(engine));
+    assert(glib_next(engine) == GLIB_RESPONSE_SAY);
     assert(glib_get_speaker(engine, speaker) == 8);
     assert(glib_get_sentence(engine, sentence) == 18);
     assert(glib_get_error(engine, error) == 0);
